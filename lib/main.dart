@@ -42,11 +42,21 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: bgColor, body: Center(child: FlutterLogo()));
+        backgroundColor: bgColor,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FlutterLogo(size: 120),
+              SizedBox(height: 24),
+              CircularProgressIndicator(),
+            ],
+          ),
+        ));
   }
 
   void navigationPage() {
-    Navigator.push(
+    Navigator.pushReplacement(
         context, MoviePageRouter(builder: (context) => HomeScreen()));
   }
 }
