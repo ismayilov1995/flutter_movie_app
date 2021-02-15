@@ -46,14 +46,14 @@ class Result {
   factory Result.fromMap(Map<String, dynamic> json) => Result(
         adult: json["adult"],
         backdropPath:
-            'https://image.tmdb.org/t/p/w500' + json["backdrop_path"],
+            'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
         originalLanguage: json["original_language"],
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
-        posterPath: json["poster_path"],
+        posterPath: 'https://image.tmdb.org/t/p/w185' + json["poster_path"],
         releaseDate: DateTime.parse(json["release_date"]),
         title: json["title"],
         video: json["video"],
