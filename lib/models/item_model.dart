@@ -45,7 +45,8 @@ class Result {
 
   factory Result.fromMap(Map<String, dynamic> json) => Result(
         adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+        backdropPath:
+            'https://image.tmdb.org/t/p/w500' + json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
         originalLanguage: json["original_language"],
@@ -63,5 +64,4 @@ class Result {
   DateTime get getReleaseDate => releaseDate;
 
   String get getOverview => overview;
-
 }

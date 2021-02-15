@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_app/blocs/movie_bloc.dart';
+import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/home/home.dart';
 import 'package:movie_app/ui/widgets/colors.dart';
 
@@ -57,7 +60,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigationPage() {
     Navigator.pushReplacement(
-        context, MoviePageRouter(builder: (context) => HomeScreen()));
+        context,
+        MoviePageRouter(
+            builder: (context) => BlocProvider(
+                create: (context) => MovieBloc(Repository()),
+                child: HomeScreen())));
   }
 }
 
