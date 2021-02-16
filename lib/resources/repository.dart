@@ -6,4 +6,6 @@ class Repository {
 
   Future<ItemModel> fetchAllMovies({bool isPopular}) =>
       movieApiProvider.fetchMovieList(isPopular: isPopular);
+
+  Future<GenresModel> fetchGenreList() => movieApiProvider.fetchGenreList();
 }
