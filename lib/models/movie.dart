@@ -61,7 +61,7 @@ class Movie {
 
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+        backdropPath: 'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
         belongsToCollection:
             BelongsToCollection.fromMap(json["belongs_to_collection"]),
         budget: json["budget"],
@@ -73,7 +73,7 @@ class Movie {
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
-        posterPath: json["poster_path"],
+        posterPath: 'https://image.tmdb.org/t/p/w185' + json["poster_path"],
         productionCompanies: List<ProductionCompany>.from(
             json["production_companies"]
                 .map((x) => ProductionCompany.fromMap(x))),

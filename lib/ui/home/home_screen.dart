@@ -87,6 +87,7 @@ class _RecentMoviesRow extends StatelessWidget {
                           return MovieCard(
                             title: m.title,
                             posterPath: m.posterPath,
+                            onPress: () => MovieDetail.route(context, m.id),
                           );
                         }))
                 : Center(child: CircularProgressIndicator());

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/models.dart';
+import 'package:movie_app/ui/movie/movie_detail.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class MovieHorizontalCard extends StatelessWidget {
-  const MovieHorizontalCard({
-    Key key,
-    @required this.m,
-    @required this.genresModel,
-    this.onPress
-  }) : super(key: key);
+  const MovieHorizontalCard(
+      {Key key, @required this.m, @required this.genresModel, this.onPress})
+      : super(key: key);
 
   final Result m;
   final GenresModel genresModel;
@@ -21,6 +19,7 @@ class MovieHorizontalCard extends StatelessWidget {
       children: [
         MovieCard(
           posterPath: m.posterPath,
+          onPress: () => MovieDetail.route(context, m.id),
         ),
         Expanded(
           child: Container(
