@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/blocs/genre/genre_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/models/movie.dart';
@@ -49,48 +48,81 @@ class MovieDetail extends StatelessWidget {
         children: [
           Container(
             height: 300,
-            width: double.infinity,
+            width: size.width,
+            alignment: Alignment.bottomLeft,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.cover,
                     alignment: Alignment.topCenter,
                     image: NetworkImage(
                         movie.posterPath.replaceAll('w185', 'w400')))),
-          ),
-          Positioned(
-            top: 230,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 70,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [
-                    0.1,
-                    0.7,
-                    1
-                  ],
-                      colors: [
-                    kBgColor.withOpacity(0.0),
-                    kBgColor.withOpacity(0.94),
-                    kBgColor,
-                  ])),
+            child: Stack(
+              children: [
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    height: 70,
+                    width: size.width,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                          kBgColor.withOpacity(0.0),
+                          kBgColor.withOpacity(0.90),
+                          kBgColor,
+                        ])),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: size.width - 40,
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          movie.title,
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      GenresRow(movie.genres),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          Positioned(
-              top: 200,
-              left: 20,
-              child: Container(
-                width: size.width - 40,
-                child: Text(
-                  movie.title,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-                ),
-              )),
-          Center(child: Text(movie.genres.map((e) => e.name).toString()))
         ],
+      ),
+    );
+  }
+}
+
+class GenresRow extends StatelessWidget {
+  GenresRow(this.genres);
+
+  final List<Genre> genres;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 20,
+      child: Wrap(
+        spacing: 10.0,
+        runSpacing: 8.0,
+        children: genres
+            .map((e) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Text(e.name),
+                ))
+            .toList(),
       ),
     );
   }
