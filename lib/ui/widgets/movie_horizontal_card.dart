@@ -7,6 +7,7 @@ class MovieHorizontalCard extends StatelessWidget {
     Key key,
     @required this.m,
     @required this.genresModel,
+    this.onPress
   }) : super(key: key);
 
   final Result m;
