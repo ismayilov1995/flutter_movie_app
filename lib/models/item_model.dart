@@ -9,11 +9,9 @@ class ItemModel {
     totalResults = json["total_results"];
 
     if (isRecent) {
-      results.sort(
-              (a, b) => b.releaseDate.compareTo(a.releaseDate));
+      results.sort((a, b) => b.releaseDate.compareTo(a.releaseDate));
     } else {
-      results.sort(
-              (a, b) => b.popularity.compareTo(a.popularity));
+      results.sort((a, b) => b.popularity.compareTo(a.popularity));
     }
   }
 }
@@ -51,11 +49,9 @@ class Result {
   double voteAverage;
   int voteCount;
 
-  factory Result.fromMap(Map<String, dynamic> json) =>
-      Result(
+  factory Result.fromMap(Map<String, dynamic> json) => Result(
         adult: json["adult"],
-        backdropPath:
-        'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
+        backdropPath: 'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
         originalLanguage: json["original_language"],
@@ -69,8 +65,4 @@ class Result {
         voteAverage: json["vote_average"].toDouble(),
         voteCount: json["vote_count"],
       );
-
-  DateTime get getReleaseDate => releaseDate;
-
-  String get getOverview => overview;
 }

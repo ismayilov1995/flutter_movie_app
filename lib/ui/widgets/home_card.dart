@@ -13,27 +13,38 @@ class HomeCardW extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: TextStyle(fontFamily: 'PaytoneOne', fontSize: 22),
-              ),
-              TextButton(
-                  child: Text(
-                    more,
-                    style: TextStyle(color: kTextColor, fontSize: 14),
-                  ),
-                  onPressed: () {}),
-            ],
-          ),
-        ),
+        HomeCardTitle(title: title),
         SizedBox(height: 6),
         child,
       ],
+    );
+  }
+}
+
+class HomeCardTitle extends StatelessWidget {
+  HomeCardTitle({@required this.title, this.more = 'SEE ALL'});
+
+  final String title, more;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontFamily: 'PaytoneOne', fontSize: 22),
+          ),
+          TextButton(
+              child: Text(
+                more,
+                style: TextStyle(color: kTextColor, fontSize: 14),
+              ),
+              onPressed: () {}),
+        ],
+      ),
     );
   }
 }

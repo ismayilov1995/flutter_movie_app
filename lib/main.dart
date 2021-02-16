@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_app/blocs/genre/genre_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/home/home.dart';
@@ -60,12 +61,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() {
+    final repo = Repository();
     Navigator.pushReplacement(
         context,
         CupertinoPageRoute(
-            builder: (context) => BlocProvider(
-                create: (context) => MovieBloc(Repository()),
-                child: HomeScreen())));
+            builder: (context) => MultiBlocProvider(providers: [
+                  BlocProvider<MovieBloc>(create: (context) => MovieBloc(repo)),
+                  BlocProvider<GenreBloc>(create: (context) => GenreBloc(repo)),
+                ], child: HomeScreen())));
   }
 }
 

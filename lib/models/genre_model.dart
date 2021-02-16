@@ -6,9 +6,16 @@ class GenresModel {
   List<Genre> genres;
 
   factory GenresModel.fromMap(Map<String, dynamic> json) => GenresModel(
-    genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
-  );
+        genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
+      );
 
+  String getGenreTitle(List<int> genreIds) {
+    String titledGenres = "";
+    genreIds.forEach((e) =>
+        titledGenres += genres.where((g) => g.id == e).first.name + ", ");
+    titledGenres = titledGenres.substring(0, titledGenres.length - 2);
+    return titledGenres;
+  }
 }
 
 class Genre {
@@ -21,12 +28,12 @@ class Genre {
   String name;
 
   factory Genre.fromMap(Map<String, dynamic> json) => Genre(
-    id: json["id"],
-    name: json["name"],
-  );
+        id: json["id"],
+        name: json["name"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "name": name,
-  };
+        "id": id,
+        "name": name,
+      };
 }

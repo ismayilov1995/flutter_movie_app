@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/models/models.dart';
 
 class MovieCard extends StatelessWidget {
-  const MovieCard({
-    Key key,
-    @required this.m,
-  }) : super(key: key);
+  const MovieCard({Key key, @required this.posterPath, this.title})
+      : super(key: key);
 
-  final Result m;
+  final String title, posterPath;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +18,14 @@ class MovieCard extends StatelessWidget {
           ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
-                m.posterPath,
+                posterPath,
                 fit: BoxFit.cover,
                 height: 180,
               )),
-          SizedBox(height: 6),
-          Text(m.title),
+          if (title != null) ...[
+            SizedBox(height: 6),
+            Text(title),
+          ]
         ],
       ),
     );
