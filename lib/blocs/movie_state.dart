@@ -6,9 +6,9 @@ abstract class MovieState {}
 class MovieInitial extends MovieState {}
 
 class SuccessFetchMovies extends MovieState {
-  final ItemModel itemModel;
+  SuccessFetchMovies({this.recent, this.popular});
 
-  SuccessFetchMovies(this.itemModel);
+  final ItemModel recent, popular;
 }
 
 class FailFetchMovies extends MovieState {}

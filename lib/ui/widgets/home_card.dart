@@ -24,7 +24,7 @@ class HomeCardW extends StatelessWidget {
               ),
               Text(
                 more,
-                style: TextStyle(color: kTextColor, fontSize: 18),
+                style: TextStyle(color: kTextColor, fontSize: 14),
               ),
             ],
           ),

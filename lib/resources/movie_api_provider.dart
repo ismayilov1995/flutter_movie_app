@@ -8,8 +8,10 @@ class MovieApiProvider {
   final apiKey = "?api_key=a354cef773ecdfdee470ac417999abd6";
   final baseUrl = "https://api.themoviedb.org/3/movie/";
 
-  Future<ItemModel> fetchMovieList() async {
-    final response = await client.get(baseUrl + 'now_playing' + apiKey);
+  Future<ItemModel> fetchMovieList({bool isPopular = false}) async {
+    final type = isPopular ? 'popular' : 'now_playing';
+    final response = await client.get(baseUrl + type + apiKey);
+    print(response);
     if (response.statusCode == 200) {
       return ItemModel.fromJson(jsonDecode(response.body));
     } else {

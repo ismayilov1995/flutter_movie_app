@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
-import 'package:movie_app/models/item_model.dart';
 import 'package:movie_app/ui/widgets/colors.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
@@ -23,6 +22,7 @@ class _HomeScreenBody extends StatelessWidget {
         children: [
           _SearchRow(),
           _RecentMoviesRow(),
+          _PopularMoviesRow(),
         ],
       ),
     );
@@ -58,40 +58,55 @@ class _SearchRow extends StatelessWidget {
 class _RecentMoviesRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return HomeCardW(
       title: 'Recent',
       child: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {
           if (state is SuccessFetchMovies) {
-            return Container(
-                height: 230,
-                child: ListView.builder(
-                    primary: false,
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: state.itemModel.results.length,
-                    itemBuilder: (context, i) {
-                      final m = state.itemModel.results[i];
-                      return Container(
-                        width: size.width * 0.30,
-                        margin: EdgeInsets.only(left: i == 0 ? 20.0 : 10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.network(
-                                  m.posterPath,
-                                  fit: BoxFit.cover,
-                                  height: 180,
-                                )),
-                            SizedBox(height: 6),
-                            Text(m.title),
-                          ],
-                        ),
-                      );
-                    }));
+            return state.recent != null
+                ? Container(
+                    height: 230,
+                    child: ListView.builder(
+                        primary: false,
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.recent.results.length,
+                        itemBuilder: (context, i) {
+                          final m = state.recent.results[i];
+                          return MovieCard(m: m);
+                        }))
+                : Center(child: CircularProgressIndicator());
+          } else if (state is FailFetchMovies) {
+            return Center(child: Text('Failed while loading movies'));
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+}
+
+class _PopularMoviesRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return HomeCardW(
+      title: 'Popular',
+      child: BlocBuilder<MovieBloc, MovieState>(
+        builder: (context, state) {
+          if (state is SuccessFetchMovies) {
+            return state.popular != null
+                ? Container(
+                    height: 230,
+                    child: ListView.builder(
+                        primary: false,
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.popular.results.length,
+                        itemBuilder: (context, i) {
+                          final m = state.popular.results[i];
+                          return MovieCard(m: m);
+                        }))
+                : Center(child: CircularProgressIndicator());
           } else if (state is FailFetchMovies) {
             return Center(child: Text('Failed while loading movies'));
           }
