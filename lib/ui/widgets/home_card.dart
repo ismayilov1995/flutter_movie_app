@@ -22,10 +22,12 @@ class HomeCardW extends StatelessWidget {
                 title,
                 style: TextStyle(fontFamily: 'PaytoneOne', fontSize: 22),
               ),
-              Text(
-                more,
-                style: TextStyle(color: kTextColor, fontSize: 14),
-              ),
+              TextButton(
+                  child: Text(
+                    more,
+                    style: TextStyle(color: kTextColor, fontSize: 14),
+                  ),
+                  onPressed: () {}),
             ],
           ),
         ),

@@ -11,9 +11,8 @@ class MovieApiProvider {
   Future<ItemModel> fetchMovieList({bool isPopular = false}) async {
     final type = isPopular ? 'popular' : 'now_playing';
     final response = await client.get(baseUrl + type + apiKey);
-    print(response);
     if (response.statusCode == 200) {
-      return ItemModel.fromJson(jsonDecode(response.body));
+      return ItemModel.fromJson(jsonDecode(response.body), !isPopular);
     } else {
       throw Exception('Filed to load posts');
     }
