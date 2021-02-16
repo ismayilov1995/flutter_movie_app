@@ -18,6 +18,15 @@ class MovieApiProvider {
     }
   }
 
+  Future<Movie> fetchMovie(int id) async {
+    final response = await client.get('${baseUrl}movie/$id$apiKey');
+    if (response.statusCode == 200) {
+      return movieFromMap(response.body);
+    } else {
+      throw Exception('Filed to load posts');
+    }
+  }
+
   Future<GenresModel> fetchGenreList() async {
     final response = await client.get(baseUrl + 'genre/movie/list' + apiKey);
     if (response.statusCode == 200) {

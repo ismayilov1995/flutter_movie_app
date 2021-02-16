@@ -33,6 +33,7 @@ class MovieHorizontalCard extends StatelessWidget {
                 Text(
                   m.title,
                   style: TextStyle(fontSize: 20),
+                  softWrap: false,
                 ),
                 Text(
                   '${m.releaseDate.year}-${m.releaseDate.month}-${m.releaseDate.day}',

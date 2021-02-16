@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/genre/genre_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/models/genre_model.dart';
-import 'package:movie_app/models/item_model.dart';
+import 'package:movie_app/ui/movie/movie_detail.dart';
 import 'package:movie_app/ui/widgets/colors.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
@@ -47,7 +47,10 @@ class _SearchRow extends StatelessWidget {
         children: [
           Text(
             'Search',
-            style: TextStyle(fontFamily: 'PaytoneOne', fontSize: 30),
+            style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 30,
+                fontWeight: FontWeight.w700),
           ),
           SizedBox(height: 6),
           TextField(
@@ -119,7 +122,10 @@ class _PopularMoviesRow extends StatelessWidget {
                       itemBuilder: (context, i) {
                         final m = state.popular.results[i];
                         return MovieHorizontalCard(
-                            m: m, genresModel: genresModel);
+                          m: m,
+                          genresModel: genresModel,
+                          onPress: () => MovieDetail.route(context, m.id),
+                        );
                       })
                   : Center(child: CircularProgressIndicator());
             } else if (state is FailFetchMovies) {

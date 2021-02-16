@@ -12,3 +12,11 @@ class SuccessFetchMovies extends MovieState {
 }
 
 class FailFetchMovies extends MovieState {}
+
+class SuccessFetchMovie extends MovieState {
+  SuccessFetchMovie(this.movie);
+
+  final Movie movie;
+}
+
+class FailFetchMovie extends MovieState {}

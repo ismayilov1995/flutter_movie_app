@@ -8,4 +8,6 @@ class Repository {
       movieApiProvider.fetchMovieList(isPopular: isPopular);
 
   Future<GenresModel> fetchGenreList() => movieApiProvider.fetchGenreList();
+
+  Future<Movie> fetchMovie(int id) => movieApiProvider.fetchMovie(id);
 }

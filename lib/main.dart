@@ -16,13 +16,16 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Movie App',
-      theme: ThemeData.dark().copyWith(
-        primaryColor: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return RepositoryProvider(
+      create: (context) => Repository(),
+      child: MaterialApp(
+        title: 'Movie App',
+        theme: ThemeData.dark().copyWith(
+          primaryColor: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: SplashScreen(),
       ),
-      home: SplashScreen(),
     );
   }
 }
@@ -61,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() {
-    final repo = Repository();
+    final repo = context.read<Repository>();
     Navigator.pushReplacement(
         context,
         CupertinoPageRoute(

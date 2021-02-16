@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:movie_app/models/item_model.dart';
+import 'package:movie_app/models/models.dart';
 import 'package:movie_app/resources/repositories.dart';
 
 part 'movie_event.dart';
@@ -29,6 +30,14 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       } catch (e) {
         print(e);
         yield FailFetchMovies();
+      }
+    } else if (event is FetchMovie) {
+      try {
+        final response = await _repository.fetchMovie(event.id);
+        yield SuccessFetchMovie(response);
+      } catch (e) {
+        print(e);
+        yield FailFetchMovie();
       }
     }
   }

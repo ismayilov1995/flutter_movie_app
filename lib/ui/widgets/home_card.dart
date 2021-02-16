@@ -35,7 +35,7 @@ class HomeCardTitle extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(fontFamily: 'PaytoneOne', fontSize: 22),
+            style: TextStyle(fontFamily: 'Roboto', fontSize: 22, fontWeight: FontWeight.w700),
           ),
           TextButton(
               child: Text(
