@@ -2,11 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
-import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/models/models.dart';
-import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/resources/repositories.dart';
-import 'package:movie_app/ui/widgets/colors.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class MovieDetail extends StatelessWidget {

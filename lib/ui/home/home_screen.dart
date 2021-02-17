@@ -4,11 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/genre/genre_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/models/genre_model.dart';
+import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/movie/movie_detail.dart';
 import 'package:movie_app/ui/widgets/colors.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
+  static route(BuildContext context) {
+    final repo = context.read<Repository>();
+    Navigator.pushReplacement(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => MultiBlocProvider(providers: [
+                  BlocProvider<MovieBloc>(create: (context) => MovieBloc(repo)),
+                  BlocProvider<GenreBloc>(create: (context) => GenreBloc(repo)),
+                ], child: HomeScreen())));
+  }
+
   @override
   Widget build(BuildContext context) {
     context.read<MovieBloc>().add(FetchAllMovies());
