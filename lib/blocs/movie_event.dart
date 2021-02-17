@@ -10,3 +10,9 @@ class FetchMovie extends MovieEvent {
 
   final int id;
 }
+
+class PlayTrailer extends MovieEvent {
+  PlayTrailer(this.videoKey);
+
+  final String videoKey;
+}

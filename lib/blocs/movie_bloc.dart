@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:movie_app/models/item_model.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/resources/repositories.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'movie_event.dart';
 
@@ -41,6 +42,20 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         print(e);
         yield FailFetchMovie();
       }
+    } else if (event is PlayTrailer) {
+      try {
+        await _launchURL('https://www.youtube.com/watch?v=' + event.videoKey);
+      } catch (e) {
+        print(e);
+      }
     }
+  }
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    print('can\'t launch');
   }
 }

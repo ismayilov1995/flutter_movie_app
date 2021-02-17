@@ -44,68 +44,78 @@ class MovieDetail extends StatelessWidget {
   Widget _scaffoldBody(
       BuildContext context, Movie movie, TrailersModel trailersModel) {
     final size = MediaQuery.of(context).size;
-    return ListView(
+    return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
-      children: [
-        Container(
-          height: 300,
-          width: size.width,
-          alignment: Alignment.bottomLeft,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                  image: NetworkImage(
-                      movie.posterPath.replaceAll('w185', 'w400')))),
-          child: Stack(
+      child: Column(
+        children: [
+          Stack(
             children: [
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  height: 70,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                        kBgColor.withOpacity(0.0),
-                        kBgColor.withOpacity(0.90),
-                        kBgColor,
-                      ])),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+              Container(
+                height: 300,
+                width: size.width,
+                alignment: Alignment.bottomLeft,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
+                        image: NetworkImage(
+                            movie.posterPath.replaceAll('w185', 'w400')))),
+                child: Stack(
                   children: [
-                    Container(
-                      width: size.width - 40,
-                      margin: EdgeInsets.only(bottom: 10.0),
-                      child: AppText(
-                        movie.title,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        height: 70,
+                        width: size.width,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                              kBgColor.withOpacity(0.0),
+                              kBgColor.withOpacity(0.90),
+                              kBgColor,
+                            ])),
                       ),
                     ),
-                    GenresRow(movie.genres),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: size.width - 40,
+                            margin: EdgeInsets.only(bottom: 10.0),
+                            child: AppText(
+                              movie.title,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          GenresRow(movie.genres),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
+              AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                actions: [
+                  IconButton(
+                      icon: Icon(Icons.favorite_outline), onPressed: () {})
+                ],
+              ),
             ],
           ),
-        ),
-        Divider(indent: 20.0, endIndent: 20.0),
-        Container(
-          height: 80,
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+          Divider(indent: 20.0, endIndent: 20.0),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                movieProps(
                   AppText(
                     movie.popularity.toStringAsFixed(2),
                     color: Colors.pink[400],
@@ -113,11 +123,8 @@ class MovieDetail extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                   AppText('Popularity', fontSize: 18),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                ),
+                movieProps(
                   Icon(Icons.star, color: Colors.pink, size: 18),
                   Row(
                     children: [
@@ -126,11 +133,8 @@ class MovieDetail extends StatelessWidget {
                       AppText('/10', fontSize: 18),
                     ],
                   ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                ),
+                movieProps(
                   AppText(
                     movie.voteCount.toString(),
                     color: Colors.blue,
@@ -141,31 +145,46 @@ class MovieDetail extends StatelessWidget {
                     'Vote count',
                     fontSize: 18,
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-        ),
-        Divider(indent: 20.0, endIndent: 20.0),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppText(
-                'Description',
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              AppText(
-                movie.overview,
-                fontSize: 18,
-              )
-            ],
+          Divider(indent: 20.0, endIndent: 20.0),
+          detailCard(
+            title: 'Description',
+            child: AppText(movie.overview, fontSize: 18),
           ),
-        ),
-        TrailersCol(trailersModel),
-      ],
+          detailCard(
+            title: 'Trailers',
+            child: TrailersCol(trailersModel, backdropPath: movie.backdropPath),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Column movieProps(Widget stCol, ndCol) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [stCol, ndCol],
+    );
+  }
+
+  Widget detailCard({String title, Widget child}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppText(
+            title,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          SizedBox(height: 12),
+          child
+        ],
+      ),
     );
   }
 }
@@ -198,33 +217,41 @@ class GenresRow extends StatelessWidget {
 }
 
 class TrailersCol extends StatelessWidget {
-  TrailersCol(this.trailersModel);
+  TrailersCol(this.trailersModel, {@required this.backdropPath});
 
+  final String backdropPath;
   final TrailersModel trailersModel;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppText(
-            'Trailers',
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-          trailersModel != null
-              ? ListView.builder(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: trailersModel.results.length,
-                  itemBuilder: (context, i) => ListTile(
-                        title: Text(trailersModel.results[i].name),
-                      ))
-              : Center(child: CircularProgressIndicator())
-        ],
-      ),
-    );
+    return trailersModel == null
+        ? Center(child: CircularProgressIndicator())
+        : GridView.builder(
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            itemCount: trailersModel.results.length,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 250,
+              childAspectRatio: 1.2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+            ),
+            itemBuilder: (context, i) => InkWell(
+                  onTap: () => context
+                      .read<MovieBloc>()
+                      .add(PlayTrailer(trailersModel.results[i].key)),
+                  child: Stack(
+                    children: [
+                      Wrap(
+                        runSpacing: 4,
+                        children: [
+                          Image.network(backdropPath),
+                          AppText(trailersModel.results[i].name),
+                        ],
+                      ),
+                      Icon(Icons.play_arrow)
+                    ],
+                  ),
+                ));
   }
 }
