@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/models/genre_model.dart';
+import 'package:movie_app/models/models.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/widgets/colors.dart';
@@ -30,7 +31,7 @@ class MovieDetail extends StatelessWidget {
       body: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {
           if (state is SuccessFetchMovie) {
-            return _scaffoldBody(context, state.movie);
+            return _scaffoldBody(context, state.movie, state.trailersModel);
           } else if (state is FailFetchMovie) {
             return Center(child: Text('Error while load details'));
           }
@@ -40,9 +41,11 @@ class MovieDetail extends StatelessWidget {
     );
   }
 
-  Widget _scaffoldBody(BuildContext context, Movie movie) {
+  Widget _scaffoldBody(
+      BuildContext context, Movie movie, TrailersModel trailersModel) {
     final size = MediaQuery.of(context).size;
     return ListView(
+      physics: BouncingScrollPhysics(),
       children: [
         Container(
           height: 300,
@@ -161,23 +164,7 @@ class MovieDetail extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppText(
-                'Trailers',
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              AppText(
-                movie.overview,
-                fontSize: 18,
-              )
-            ],
-          ),
-        )
+        TrailersCol(trailersModel),
       ],
     );
   }
@@ -205,6 +192,38 @@ class GenresRow extends StatelessWidget {
                   child: Text(e.name),
                 ))
             .toList(),
+      ),
+    );
+  }
+}
+
+class TrailersCol extends StatelessWidget {
+  TrailersCol(this.trailersModel);
+
+  final TrailersModel trailersModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppText(
+            'Trailers',
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          trailersModel != null
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemCount: trailersModel.results.length,
+                  itemBuilder: (context, i) => ListTile(
+                        title: Text(trailersModel.results[i].name),
+                      ))
+              : Center(child: CircularProgressIndicator())
+        ],
       ),
     );
   }

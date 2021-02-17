@@ -35,4 +35,13 @@ class MovieApiProvider {
       throw Exception('Filed to load genres');
     }
   }
+
+  Future<TrailersModel> fetchMovieTrailers(int id) async {
+    final response = await client.get('${baseUrl}movie/$id/videos$apiKey');
+    if (response.statusCode == 200) {
+      return trailersModelFromMap(response.body);
+    } else {
+      throw Exception('Filed to load trailers');
+    }
+  }
 }

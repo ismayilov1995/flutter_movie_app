@@ -5,6 +5,7 @@ class Repository {
   final movieApiProvider = MovieApiProvider();
 
   Map<int, Movie> cachedMovie = Map();
+  Map<int, TrailersModel> cachedTrailer = Map();
 
   Future<ItemModel> fetchAllMovies({bool isPopular}) =>
       movieApiProvider.fetchMovieList(isPopular: isPopular);
@@ -21,5 +22,12 @@ class Repository {
       m = mov;
     }
     return m;
+  }
+
+  Future<TrailersModel> fetchMovieTrailers(int id) async {
+    if (!cachedTrailer.containsKey(id)) {
+      cachedTrailer[id] = await movieApiProvider.fetchMovieTrailers(id);
+    }
+    return cachedTrailer[id];
   }
 }

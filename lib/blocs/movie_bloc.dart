@@ -34,7 +34,9 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     } else if (event is FetchMovie) {
       try {
         final response = await _repository.fetchMovie(event.id);
-        yield SuccessFetchMovie(response);
+        yield SuccessFetchMovie(movie: response);
+        final trailerRes = await _repository.fetchMovieTrailers(event.id);
+        yield SuccessFetchMovie(movie: response, trailersModel: trailerRes);
       } catch (e) {
         print(e);
         yield FailFetchMovie();
