@@ -4,13 +4,19 @@ import 'package:movie_app/ui/movie/movie_detail.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class MovieHorizontalCard extends StatelessWidget {
-  const MovieHorizontalCard(
-      {Key key, @required this.m, @required this.genresModel, this.onPress})
-      : super(key: key);
+  const MovieHorizontalCard({
+    Key key,
+    @required this.m,
+    this.genresModel,
+    this.onPress,
+    this.onRemove,
+    this.favBtn = false,
+  }) : super(key: key);
 
-  final Result m;
+  final Movie m;
   final GenresModel genresModel;
-  final VoidCallback onPress;
+  final VoidCallback onPress, onRemove;
+  final bool favBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +44,11 @@ class MovieHorizontalCard extends StatelessWidget {
                   '${m.releaseDate.year}-${m.releaseDate.month}-${m.releaseDate.day}',
                   style: TextStyle(fontSize: 16),
                 ),
-                Text(
-                  genresModel.getGenreTitle(m.genreIds),
-                  style: TextStyle(color: kTextColor),
-                ),
+                if (genresModel != null)
+                  Text(
+                    genresModel.getGenreTitle(m.genreIds),
+                    style: TextStyle(color: kTextColor),
+                  ),
                 Row(
                   children: [
                     Icon(Icons.star, color: Colors.pink),
@@ -62,8 +69,17 @@ class MovieHorizontalCard extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: OutlineButton(
-                      child: Text('See details'), onPressed: onPress),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (favBtn)
+                        OutlineButton(
+                            child: Text('Remove'), onPressed: onRemove),
+                      SizedBox(width: 12.0),
+                      OutlineButton(
+                          child: Text('See details'), onPressed: onPress),
+                    ],
+                  ),
                 )
               ],
             ),

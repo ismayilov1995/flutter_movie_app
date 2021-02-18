@@ -32,6 +32,7 @@ class Movie {
     this.voteAverage,
     this.voteCount,
     this.favorite,
+    this.genreIds,
   });
 
   bool adult;
@@ -60,6 +61,24 @@ class Movie {
   double voteAverage;
   int voteCount;
   bool favorite;
+  List<int> genreIds;
+
+  factory Movie.fromMapForHome(Map<String, dynamic> json) => Movie(
+        adult: json["adult"],
+        backdropPath: 'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
+        genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
+        id: json["id"],
+        originalLanguage: json["original_language"],
+        originalTitle: json["original_title"],
+        overview: json["overview"],
+        popularity: json["popularity"].toDouble(),
+        posterPath: 'https://image.tmdb.org/t/p/w185' + json["poster_path"],
+        releaseDate: DateTime.parse(json["release_date"]),
+        title: json["title"],
+        video: json["video"],
+        voteAverage: json["vote_average"].toDouble(),
+        voteCount: json["vote_count"],
+      );
 
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(
         adult: json["adult"],

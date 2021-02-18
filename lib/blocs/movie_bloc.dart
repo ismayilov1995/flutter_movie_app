@@ -18,9 +18,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final sqfRepository = DatabaseRepository();
 
   @override
-  Stream<MovieState> mapEventToState(
-    MovieEvent event,
-  ) async* {
+  Stream<MovieState> mapEventToState(MovieEvent event,) async* {
     if (event is FetchAllMovies) {
       yield SuccessFetchMovies();
       try {
@@ -63,19 +61,23 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     } else if (event is FetchFavorites) {
       try {
         final res = await sqfRepository.getFavoritesMovie();
-        print(res.length);
+        yield SuccessFetchFavoriteMovies(res);
       } catch (e) {
         print(e);
       }
     } else if (event is RemoveFavorites) {
       try {
+        final s = (state as SuccessFetchFavoriteMovies);
         await sqfRepository.removeFavoritesMovie(event.movieID);
+        yield SuccessFetchFavoriteMovies(
+            s.movies.where((e) => e.id != event.movieID).toList());
       } catch (e) {
         print(e);
       }
     } else if (event is ClearFavorites) {
       try {
         await sqfRepository.removeAllFavorites();
+        yield SuccessFetchFavoriteMovies([]);
       } catch (e) {
         print(e);
       }

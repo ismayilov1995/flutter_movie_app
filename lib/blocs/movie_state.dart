@@ -27,3 +27,9 @@ class SuccessFavoriteMovie extends MovieState {
 
   final String text;
 }
+
+class SuccessFetchFavoriteMovies extends MovieState {
+  SuccessFetchFavoriteMovies(this.movies);
+
+  final List<Movie> movies;
+}

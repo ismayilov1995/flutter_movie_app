@@ -58,6 +58,7 @@ class _SearchRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Search',
@@ -66,8 +67,9 @@ class _SearchRow extends StatelessWidget {
                     fontSize: 30,
                     fontWeight: FontWeight.w700),
               ),
-              IconButton(
+              FlatButton.icon(
                 icon: Icon(Icons.favorite),
+                label: Text('Favorites'),
                 onPressed: () => FavoriteMovieScreen.route(context),
               )
             ],
