@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:movie_app/models/item_model.dart';
 import 'package:movie_app/models/models.dart';
-import 'package:movie_app/resources/database.dart';
+import 'package:movie_app/resources/database_repository.dart';
 import 'package:movie_app/resources/repositories.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,7 +15,7 @@ part 'movie_state.dart';
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   MovieBloc(this._repository) : super(MovieInitial());
   final Repository _repository;
-  final sqfRepository = DatabaseRepository.internal();
+  final sqfRepository = DatabaseRepository();
 
   @override
   Stream<MovieState> mapEventToState(
@@ -52,15 +52,26 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       }
     } else if (event is AddToFavorite) {
       try {
-        sqfRepository.insertMovie(event.movie);
-        print('inserted');
+        sqfRepository.favoriteMovie(event.movie);
       } catch (e) {
         print(e);
       }
     } else if (event is FetchFavorites) {
       try {
-        final res = await sqfRepository.getFavorites();
-        print('Fetched: ' + res.length.toString());
+        final res = await sqfRepository.getFavoritesMovie();
+        print(res.length);
+      } catch (e) {
+        print(e);
+      }
+    } else if (event is RemoveFavorites) {
+      try {
+        await sqfRepository.removeFavoritesMovie(event.movieID);
+      } catch (e) {
+        print(e);
+      }
+    } else if (event is ClearFavorites) {
+      try {
+        await sqfRepository.removeAllFavorites();
       } catch (e) {
         print(e);
       }

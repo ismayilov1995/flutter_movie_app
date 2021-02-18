@@ -1,8 +1,10 @@
 import 'package:movie_app/models/models.dart';
+import 'package:movie_app/resources/database_repository.dart';
 import 'package:movie_app/resources/movie_api_provider.dart';
 
 class Repository {
   final movieApiProvider = MovieApiProvider();
+  final movieDB = DatabaseRepository();
 
   Map<int, Movie> cachedMovie = Map();
   Map<int, TrailersModel> cachedTrailer = Map();
@@ -18,6 +20,7 @@ class Repository {
       m = cachedMovie[id];
     } else {
       final mov = await movieApiProvider.fetchMovie(id);
+      mov.favorite = await movieDB.isFavorite(id);
       cachedMovie[id] = mov;
       m = mov;
     }

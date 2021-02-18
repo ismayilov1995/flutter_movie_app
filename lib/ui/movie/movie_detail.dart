@@ -101,13 +101,24 @@ class MovieDetail extends StatelessWidget {
                 elevation: 0,
                 actions: [
                   IconButton(
-                      icon: Icon(Icons.favorite_outline),
+                      icon: movie.favorite
+                          ? Icon(Icons.favorite)
+                          : Icon(Icons.favorite_outline),
                       onPressed: () =>
                           context.read<MovieBloc>().add(AddToFavorite(movie))),
                   IconButton(
                       icon: Icon(Icons.list),
                       onPressed: () =>
-                          context.read<MovieBloc>().add(FetchFavorites()))
+                          context.read<MovieBloc>().add(FetchFavorites())),
+                  IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () => context
+                          .read<MovieBloc>()
+                          .add(RemoveFavorites(movie.id))),
+                  IconButton(
+                      icon: Icon(Icons.delete_forever),
+                      onPressed: () =>
+                          context.read<MovieBloc>().add(ClearFavorites())),
                 ],
               ),
             ],

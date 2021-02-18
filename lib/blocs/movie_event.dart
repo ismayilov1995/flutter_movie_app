@@ -24,3 +24,11 @@ class AddToFavorite extends MovieEvent {
 }
 
 class FetchFavorites extends MovieEvent {}
+
+class RemoveFavorites extends MovieEvent {
+  RemoveFavorites(this.movieID);
+
+  final int movieID;
+}
+
+class ClearFavorites extends MovieEvent {}

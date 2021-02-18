@@ -31,6 +31,7 @@ class Movie {
     this.video,
     this.voteAverage,
     this.voteCount,
+    this.favorite,
   });
 
   bool adult;
@@ -58,6 +59,7 @@ class Movie {
   bool video;
   double voteAverage;
   int voteCount;
+  bool favorite;
 
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
@@ -98,9 +100,13 @@ class Movie {
         posterPath: json["poster_path"],
         releaseDate: DateTime.parse(json["release_date"]),
         title: json["title"],
-        voteAverage: double.parse(json["vote_average"]),
-        voteCount: int.parse(json["vote_count"]),
-        genres: GenresModel.fromMap(json["genres"]).genres,
+        voteAverage: json["vote_average"],
+        voteCount: json["vote_count"],
+        genres: json["genres"]
+            .toString()
+            .split(',')
+            .map((e) => Genre(name: e))
+            .toList(),
       );
 
   Map<String, dynamic> toMap() => {
@@ -111,7 +117,7 @@ class Movie {
         "release_date": releaseDate.toString(),
         "vote_count": voteCount,
         "vote_average": voteAverage,
-        "genres": genres.map((e) => e.toMap()).toString(),
+        "genres": genres.map((x) => x.name).toList().toString(),
       };
 }
 
