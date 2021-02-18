@@ -92,6 +92,27 @@ class Movie {
         voteAverage: json["vote_average"],
         voteCount: json["vote_count"],
       );
+
+  factory Movie.fromMapForSqf(Map<String, dynamic> json) => Movie(
+        id: json["id"],
+        posterPath: json["poster_path"],
+        releaseDate: DateTime.parse(json["release_date"]),
+        title: json["title"],
+        voteAverage: double.parse(json["vote_average"]),
+        voteCount: int.parse(json["vote_count"]),
+        genres: GenresModel.fromMap(json["genres"]).genres,
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "title": title,
+        "movie_id": id,
+        "poster_path": posterPath,
+        "release_date": releaseDate.toString(),
+        "vote_count": voteCount,
+        "vote_average": voteAverage,
+        "genres": genres.map((e) => e.toMap()).toString(),
+      };
 }
 
 class BelongsToCollection {

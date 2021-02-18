@@ -16,3 +16,11 @@ class PlayTrailer extends MovieEvent {
 
   final String videoKey;
 }
+
+class AddToFavorite extends MovieEvent {
+  AddToFavorite(this.movie);
+
+  final Movie movie;
+}
+
+class FetchFavorites extends MovieEvent {}

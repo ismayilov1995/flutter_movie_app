@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/ui/home/home.dart';
 import 'package:movie_app/ui/splash_screen.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 

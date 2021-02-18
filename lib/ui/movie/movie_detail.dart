@@ -101,7 +101,13 @@ class MovieDetail extends StatelessWidget {
                 elevation: 0,
                 actions: [
                   IconButton(
-                      icon: Icon(Icons.favorite_outline), onPressed: () {})
+                      icon: Icon(Icons.favorite_outline),
+                      onPressed: () =>
+                          context.read<MovieBloc>().add(AddToFavorite(movie))),
+                  IconButton(
+                      icon: Icon(Icons.list),
+                      onPressed: () =>
+                          context.read<MovieBloc>().add(FetchFavorites()))
                 ],
               ),
             ],
