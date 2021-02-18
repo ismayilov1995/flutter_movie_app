@@ -20,10 +20,10 @@ class Repository {
       m = cachedMovie[id];
     } else {
       final mov = await movieApiProvider.fetchMovie(id);
-      mov.favorite = await movieDB.isFavorite(id);
       cachedMovie[id] = mov;
       m = mov;
     }
+    m.favorite = await movieDB.isFavorite(id);
     return m;
   }
 

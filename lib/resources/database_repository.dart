@@ -47,13 +47,14 @@ class DatabaseRepository {
         'CREATE TABLE $_movieTable($_colID INTEGER PRIMARY KEY, $_colMovieID INTEGER, $_colGenres TEXT, $_colPosterPath TEXT, $_colReleaseDate TEXT, $_colTitle TEXT, $_colVoteAvg INTEGER, $_colVoteCount INTEGER)');
   }
 
-  Future<int> favoriteMovie(Movie movie) async {
+  Future<bool> favoriteMovie(Movie movie) async {
     final db = await _getDb();
     if (await isFavorite(movie.id)) {
-      return 0;
+      await removeFavoritesMovie(movie.id);
+      return false;
     } else {
-      return await db.insert(_movieTable, movie.toMap(),
-          nullColumnHack: '$_colID');
+      await db.insert(_movieTable, movie.toMap(), nullColumnHack: '$_colID');
+      return true;
     }
   }
 

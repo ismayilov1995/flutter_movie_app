@@ -25,7 +25,14 @@ class MovieDetail extends StatelessWidget {
     context.read<MovieBloc>().add(FetchMovie(this.movieId));
     return Scaffold(
       backgroundColor: kBgColor,
-      body: BlocBuilder<MovieBloc, MovieState>(
+      body: BlocConsumer<MovieBloc, MovieState>(
+        listener: (context, state) {
+          if (state is SuccessFavoriteMovie) {
+            Scaffold.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.text)));
+          }
+        },
         builder: (context, state) {
           if (state is SuccessFetchMovie) {
             return _scaffoldBody(context, state.movie, state.trailersModel);
@@ -106,19 +113,6 @@ class MovieDetail extends StatelessWidget {
                           : Icon(Icons.favorite_outline),
                       onPressed: () =>
                           context.read<MovieBloc>().add(AddToFavorite(movie))),
-                  IconButton(
-                      icon: Icon(Icons.list),
-                      onPressed: () =>
-                          context.read<MovieBloc>().add(FetchFavorites())),
-                  IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () => context
-                          .read<MovieBloc>()
-                          .add(RemoveFavorites(movie.id))),
-                  IconButton(
-                      icon: Icon(Icons.delete_forever),
-                      onPressed: () =>
-                          context.read<MovieBloc>().add(ClearFavorites())),
                 ],
               ),
             ],
