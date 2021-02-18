@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/resources/repositories.dart';
+import 'package:movie_app/ui/movie/favorite_movie_screen.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class MovieDetail extends StatelessWidget {
@@ -30,7 +31,13 @@ class MovieDetail extends StatelessWidget {
           if (state is SuccessFavoriteMovie) {
             Scaffold.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(state.text)));
+              ..showSnackBar(SnackBar(
+                  action: SnackBarAction(
+                    textColor: Colors.pink,
+                    label: 'Go to favorites',
+                    onPressed: () => FavoriteMovieScreen.route(context),
+                  ),
+                  content: Text(state.text)));
           }
         },
         builder: (context, state) {
