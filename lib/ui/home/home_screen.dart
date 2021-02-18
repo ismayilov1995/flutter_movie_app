@@ -5,8 +5,8 @@ import 'package:movie_app/blocs/genre/genre_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/resources/repositories.dart';
+import 'package:movie_app/ui/movie/favorite_movie_screen.dart';
 import 'package:movie_app/ui/movie/movie_detail.dart';
-import 'package:movie_app/ui/widgets/colors.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -57,12 +57,20 @@ class _SearchRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Search',
-            style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 30,
-                fontWeight: FontWeight.w700),
+          Row(
+            children: [
+              Text(
+                'Search',
+                style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700),
+              ),
+              IconButton(
+                icon: Icon(Icons.favorite),
+                onPressed: () => FavoriteMovieScreen.route(context),
+              )
+            ],
           ),
           SizedBox(height: 6),
           TextField(
