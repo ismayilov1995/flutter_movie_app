@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,8 +70,10 @@ class MovieDetail extends StatelessWidget {
                     image: DecorationImage(
                         fit: BoxFit.cover,
                         alignment: Alignment.topCenter,
-                        image: NetworkImage(
-                            movie.posterPath.replaceAll('w185', 'w400')))),
+                        image: ExtendedNetworkImageProvider(
+                          movie.posterPath.replaceAll('w185', 'w400'),
+                          cache: true,
+                        ))),
                 child: Stack(
                   children: [
                     Positioned(
@@ -260,7 +263,7 @@ class TrailersCol extends StatelessWidget {
                       Wrap(
                         runSpacing: 4,
                         children: [
-                          Image.network(backdropPath),
+                          CachedImage(backdropPath),
                           AppText(trailersModel.results[i].name),
                         ],
                       ),

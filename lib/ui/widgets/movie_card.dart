@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/ui/widgets/cached_image.dart';
 
 class MovieCard extends StatelessWidget {
   const MovieCard(
@@ -21,7 +22,7 @@ class MovieCard extends StatelessWidget {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
+                child: CachedImage(
                   posterPath,
                   fit: BoxFit.cover,
                   height: 180,

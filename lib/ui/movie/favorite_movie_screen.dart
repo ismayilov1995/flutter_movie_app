@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
-import 'package:flutter/services.dart';
 import 'package:movie_app/resources/repository.dart';
 import 'package:movie_app/ui/movie/movie_detail.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
