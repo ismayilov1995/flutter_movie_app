@@ -6,9 +6,10 @@ abstract class MovieEvent {}
 class FetchAllMovies extends MovieEvent {}
 
 class FetchMovie extends MovieEvent {
-  FetchMovie(this.id);
+  FetchMovie(this.id, {this.refresh = false});
 
   final int id;
+  final bool refresh;
 }
 
 class PlayTrailer extends MovieEvent {

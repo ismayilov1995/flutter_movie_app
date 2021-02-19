@@ -67,10 +67,10 @@ class _SearchRow extends StatelessWidget {
                     fontSize: 30,
                     fontWeight: FontWeight.w700),
               ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () =>
-                    context.read<MovieBloc>().add(ClearMovieCache()),
+              FlatButton.icon(
+                icon: Icon(Icons.favorite),
+                label: Text('Favorites'),
+                onPressed: () => FavoriteMovieScreen.route(context),
               ),
             ],
           ),

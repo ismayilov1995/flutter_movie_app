@@ -14,9 +14,9 @@ class Repository {
 
   Future<GenresModel> fetchGenreList() => movieApiProvider.fetchGenreList();
 
-  Future<Movie> fetchMovie(int id) async {
+  Future<Movie> fetchMovie(int id, {bool refresh=false}) async {
     Movie m;
-    if (await movieDB.isMovieStored(id)) {
+    if (await movieDB.isMovieStored(id) && !refresh) {
       m = await movieDB.getMovie(id);
     } else {
       final mov = await movieApiProvider.fetchMovie(id);

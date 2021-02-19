@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,7 @@ import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/movie/favorite_movie_screen.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
-class MovieDetail extends StatelessWidget {
+class MovieDetail extends StatefulWidget {
   static route(BuildContext context, int id) {
     Navigator.push(
         context,
@@ -23,8 +25,21 @@ class MovieDetail extends StatelessWidget {
   final int movieId;
 
   @override
+  _MovieDetailState createState() => _MovieDetailState();
+}
+
+class _MovieDetailState extends State<MovieDetail> {
+  Completer<void> _refreshCompleter;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshCompleter = Completer();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    context.read<MovieBloc>().add(FetchMovie(this.movieId));
+    context.read<MovieBloc>().add(FetchMovie(this.widget.movieId));
     return Scaffold(
       backgroundColor: kBgColor,
       body: BlocConsumer<MovieBloc, MovieState>(
@@ -39,6 +54,10 @@ class MovieDetail extends StatelessWidget {
                     onPressed: () => FavoriteMovieScreen.route(context),
                   ),
                   content: Text(state.text)));
+          }
+          if (state is RefreshFavoriteMovie) {
+            _refreshCompleter?.complete();
+            _refreshCompleter = Completer();
           }
         },
         builder: (context, state) {
@@ -56,128 +75,137 @@ class MovieDetail extends StatelessWidget {
   Widget _scaffoldBody(
       BuildContext context, Movie movie, TrailersModel trailersModel) {
     final size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 300,
-                width: size.width,
-                alignment: Alignment.bottomLeft,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
-                        image: ExtendedNetworkImageProvider(
-                          movie.posterPath.replaceAll('w185', 'w400'),
-                          cache: true,
-                        ))),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      bottom: 0,
-                      child: Container(
-                        height: 70,
-                        width: size.width,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                              kBgColor.withOpacity(0.0),
-                              kBgColor.withOpacity(0.90),
-                              kBgColor,
-                            ])),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: size.width - 40,
-                            margin: EdgeInsets.only(bottom: 10.0),
-                            child: AppText(
-                              movie.title,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          GenresRow(movie.genres),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                actions: [
-                  IconButton(
-                      icon: movie.favorite
-                          ? Icon(Icons.favorite)
-                          : Icon(Icons.favorite_outline),
-                      onPressed: () => context
-                          .read<MovieBloc>()
-                          .add(AddToFavorite(movie.id))),
-                ],
-              ),
-            ],
-          ),
-          Divider(indent: 20.0, endIndent: 20.0),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return RefreshIndicator(
+      onRefresh: () {
+        context
+            .read<MovieBloc>()
+            .add(FetchMovie(this.widget.movieId, refresh: true));
+        return _refreshCompleter.future;
+      },
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            Stack(
               children: [
-                movieProps(
-                  AppText(
-                    movie.popularity.toStringAsFixed(2),
-                    color: Colors.pink[400],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  AppText('Popularity', fontSize: 18),
-                ),
-                movieProps(
-                  Icon(Icons.star, color: Colors.pink, size: 18),
-                  Row(
+                Container(
+                  height: 300,
+                  width: size.width,
+                  alignment: Alignment.bottomLeft,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                          image: ExtendedNetworkImageProvider(
+                            movie.posterPath.replaceAll('w185', 'w400'),
+                            cache: true,
+                          ))),
+                  child: Stack(
                     children: [
-                      AppText(movie.voteAverage.toString(),
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                      AppText('/10', fontSize: 18),
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+                          height: 70,
+                          width: size.width,
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                kBgColor.withOpacity(0.0),
+                                kBgColor.withOpacity(0.90),
+                                kBgColor,
+                              ])),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 10.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: size.width - 40,
+                              margin: EdgeInsets.only(bottom: 10.0),
+                              child: AppText(
+                                movie.title,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            GenresRow(movie.genres),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                movieProps(
-                  AppText(
-                    movie.voteCount.toString(),
-                    color: Colors.blue,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  AppText(
-                    'Vote count',
-                    fontSize: 18,
-                  ),
+                AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  actions: [
+                    IconButton(
+                        icon: movie.favorite
+                            ? Icon(Icons.favorite)
+                            : Icon(Icons.favorite_outline),
+                        onPressed: () => context
+                            .read<MovieBloc>()
+                            .add(AddToFavorite(movie.id))),
+                  ],
                 ),
               ],
             ),
-          ),
-          Divider(indent: 20.0, endIndent: 20.0),
-          detailCard(
-            title: 'Description',
-            child: AppText(movie.overview, fontSize: 18),
-          ),
-          detailCard(
-            title: 'Trailers',
-            child: TrailersCol(trailersModel, backdropPath: movie.backdropPath),
-          ),
-        ],
+            Divider(indent: 20.0, endIndent: 20.0),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  movieProps(
+                    AppText(
+                      movie.popularity.toStringAsFixed(2),
+                      color: Colors.pink[400],
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    AppText('Popularity', fontSize: 18),
+                  ),
+                  movieProps(
+                    Icon(Icons.star, color: Colors.pink, size: 18),
+                    Row(
+                      children: [
+                        AppText(movie.voteAverage.toString(),
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                        AppText('/10', fontSize: 18),
+                      ],
+                    ),
+                  ),
+                  movieProps(
+                    AppText(
+                      movie.voteCount.toString(),
+                      color: Colors.blue,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    AppText(
+                      'Vote count',
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(indent: 20.0, endIndent: 20.0),
+            detailCard(
+              title: 'Description',
+              child: AppText(movie.overview, fontSize: 18),
+            ),
+            detailCard(
+              title: 'Trailers',
+              child:
+                  TrailersCol(trailersModel, backdropPath: movie.backdropPath),
+            ),
+          ],
+        ),
       ),
     );
   }

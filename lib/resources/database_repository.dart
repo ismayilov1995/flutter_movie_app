@@ -83,6 +83,7 @@ class DatabaseRepository {
 
   Future<bool> addMovie(Movie movie) async {
     if (await isMovieStored(movie.id)) {
+      await removeMovie(movie.id);
       return false;
     } else {
       final db = await _getDb();
@@ -102,6 +103,12 @@ class DatabaseRepository {
     final db = await _getDb();
     var res =
         await db.rawQuery('SELECT id FROM $_movieTable WHERE id=?', [movieID]);
+    return res.length > 0;
+  }
+
+  Future<bool> removeMovie(int id) async {
+    final db = await _getDb();
+    final res = await db.rawQuery('DELETE FROM $_movieTable WHERE id=?', [id]);
     return res.length > 0;
   }
 

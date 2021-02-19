@@ -36,7 +36,10 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       }
     } else if (event is FetchMovie) {
       try {
-        final response = await _repository.fetchMovie(event.id);
+        final response = await _repository.fetchMovie(event.id, refresh: event.refresh);
+        if (event.refresh){
+          yield RefreshFavoriteMovie();
+        }
         yield SuccessFetchMovie(movie: response);
         final trailerRes = await _repository.fetchMovieTrailers(event.id);
         yield SuccessFetchMovie(movie: response, trailersModel: trailerRes);

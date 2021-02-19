@@ -11,6 +11,8 @@ class SuccessFetchMovies extends MovieState {
   final MovieResponse recent, popular;
 }
 
+class RefreshFavoriteMovie extends MovieState {}
+
 class FailFetchMovies extends MovieState {}
 
 class SuccessFetchMovie extends MovieState {
