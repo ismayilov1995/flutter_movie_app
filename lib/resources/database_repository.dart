@@ -12,14 +12,6 @@ class DatabaseRepository {
 
   String _favoriteTable = 'favorites';
   String _movieTable = 'movie';
-  String _colID = 'id';
-  String _colTitle = 'title';
-  String _colMovieID = 'movie_id';
-  String _colPosterPath = 'poster_path';
-  String _colReleaseDate = 'release_date';
-  String _colVoteCount = 'vote_count';
-  String _colVoteAvg = 'vote_average';
-  String _colGenres = 'genres';
 
   DatabaseRepository._internal();
 
@@ -44,43 +36,41 @@ class DatabaseRepository {
   }
 
   Future<void> _createTable(Database db, int version) async {
-    await db.execute(
-        'CREATE TABLE $_favoriteTable($_colID INTEGER PRIMARY KEY, $_colMovieID INTEGER, $_colGenres TEXT, $_colPosterPath TEXT, $_colReleaseDate TEXT, $_colTitle TEXT, $_colVoteAvg INTEGER, $_colVoteCount INTEGER)');
+    await db.execute('CREATE TABLE $_favoriteTable(id INTEGER PRIMARY KEY)');
     await db.execute(
         'CREATE TABLE $_movieTable(id INTEGER PRIMARY KEY, movie TEXT)');
   }
 
-  Future<bool> favoriteMovie(Movie movie) async {
+  Future<bool> favoriteMovie(int id) async {
     final db = await _getDb();
-    if (await isFavorite(movie.id)) {
-      await removeFavoritesMovie(movie.id);
+    if (await isFavorite(id)) {
+      await removeFavoritesMovie(id);
       return false;
     } else {
-      await db.insert(_favoriteTable, movie.toMap(), nullColumnHack: '$_colID');
+      await db.insert(_favoriteTable, {'id': id}, nullColumnHack: 'id');
       return true;
     }
   }
 
   Future<bool> isFavorite(int movieID) async {
     final db = await _getDb();
-    var res = await db.rawQuery(
-        'SELECT $_colMovieID FROM $_favoriteTable WHERE $_colMovieID=?',
-        [movieID]);
+    var res = await db
+        .rawQuery('SELECT id FROM $_favoriteTable WHERE id=?', [movieID]);
     return res.length > 0;
   }
 
   Future<List<Movie>> getFavoritesMovie() async {
     final db = await _getDb();
+    List<Movie> movies;
     final res = await db.rawQuery('SELECT * FROM $_favoriteTable');
-    return res.map((e) {
-      return Movie.fromMapForSqf(e);
-    }).toList();
+    res.map((e) async => movies.add(await getMovie(e['id'])));
+    return movies;
   }
 
   Future<bool> removeFavoritesMovie(int movieID) async {
     final db = await _getDb();
-    final res = await db
-        .delete(_favoriteTable, where: '$_colMovieID=?', whereArgs: [movieID]);
+    final res =
+        await db.delete(_favoriteTable, where: 'id=?', whereArgs: [movieID]);
     return res > 0;
   }
 
@@ -113,4 +103,6 @@ class DatabaseRepository {
         await db.rawQuery('SELECT id FROM $_movieTable WHERE id=?', [movieID]);
     return res.length > 0;
   }
+
+
 }

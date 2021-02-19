@@ -51,7 +51,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     } else if (event is AddToFavorite) {
       final s = (state as SuccessFetchMovie);
       try {
-        s.movie.favorite = await sqfRepository.favoriteMovie(event.movie);
+        s.movie.favorite = await sqfRepository.favoriteMovie(event.movieID);
         yield SuccessFavoriteMovie(s.movie.favorite ? 'Added' : 'Removed');
         yield s;
       } catch (e) {

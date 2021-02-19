@@ -4,8 +4,6 @@ import 'package:movie_app/models/models.dart';
 
 Movie movieFromMap(String str) => Movie.fromMap(json.decode(str));
 
-String movieToMap(Movie data) => json.encode(data.toMap());
-
 Map<String, dynamic> movieToMapSqf(Movie data) => {
       'id': data.id,
       'movie': json.encode(data.toMapSqf()),
@@ -147,17 +145,6 @@ class Movie {
         voteAverage: json["vote_average"],
         voteCount: json["vote_count"],
       );
-
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "title": title,
-        "movie_id": id,
-        "poster_path": posterPath,
-        "release_date": releaseDate.toString(),
-        "vote_count": voteCount,
-        "vote_average": voteAverage,
-        "genres": genres.map((x) => x.name).toList().toString(),
-      };
 
   Map<String, dynamic> toMapSqf() => {
         "adult": adult,

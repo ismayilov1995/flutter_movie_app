@@ -18,9 +18,9 @@ class PlayTrailer extends MovieEvent {
 }
 
 class AddToFavorite extends MovieEvent {
-  AddToFavorite(this.movie);
+  AddToFavorite(this.movieID);
 
-  final Movie movie;
+  final int movieID;
 }
 
 class FetchFavorites extends MovieEvent {}
