@@ -106,11 +106,13 @@ class DatabaseRepository {
   }
 
   Future<bool> removeMovies() async {
+    // Remove movies except Favorite movies
     final db = await _getDb();
     final favMoviesID = await db.rawQuery('SELECT * FROM $_favoriteTable');
     final list = favMoviesID.map((e) => e['id']).toList();
-    final res =
-        await db.rawQuery('DELETE FROM $_movieTable WHERE id NOT IN (?)', list);
+    final fields = list.map((e) => '?').toString();
+    final res = await db.rawQuery(
+        'DELETE FROM $_movieTable WHERE id NOT IN $fields', list);
     return res.length > 0;
   }
 }
