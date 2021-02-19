@@ -73,7 +73,7 @@ class MovieHorizontalCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       if (favBtn)
-                        OutlineButton(
+                        FlatButton(
                             child: Text('Remove'), onPressed: onRemove),
                       SizedBox(width: 12.0),
                       OutlineButton(
