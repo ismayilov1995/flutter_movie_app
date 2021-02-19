@@ -32,3 +32,5 @@ class RemoveFavorites extends MovieEvent {
 }
 
 class ClearFavorites extends MovieEvent {}
+
+class ClearMovieCache extends MovieEvent {}

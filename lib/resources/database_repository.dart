@@ -61,9 +61,10 @@ class DatabaseRepository {
 
   Future<List<Movie>> getFavoritesMovie() async {
     final db = await _getDb();
-    List<Movie> movies;
+    List<Movie> movies = [];
     final res = await db.rawQuery('SELECT * FROM $_favoriteTable');
-    res.map((e) async => movies.add(await getMovie(e['id'])));
+    List<int> ids = res.map<int>((e) => e['id']).toList();
+    await Future.forEach(ids, (e) async => movies.add(await getMovie(e)));
     return movies;
   }
 
@@ -104,5 +105,12 @@ class DatabaseRepository {
     return res.length > 0;
   }
 
-
+  Future<bool> removeMovies() async {
+    final db = await _getDb();
+    final favMoviesID = await db.rawQuery('SELECT * FROM $_favoriteTable');
+    final list = favMoviesID.map((e) => e['id']).toList();
+    final res =
+        await db.rawQuery('DELETE FROM $_movieTable WHERE id NOT IN (?)', list);
+    return res.length > 0;
+  }
 }
