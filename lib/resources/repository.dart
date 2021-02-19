@@ -9,18 +9,18 @@ class Repository {
   Map<int, Movie> cachedMovie = Map();
   Map<int, TrailersModel> cachedTrailer = Map();
 
-  Future<ItemModel> fetchAllMovies({bool isPopular}) =>
+  Future<MovieResponse> fetchAllMovies({bool isPopular}) =>
       movieApiProvider.fetchMovieList(isPopular: isPopular);
 
   Future<GenresModel> fetchGenreList() => movieApiProvider.fetchGenreList();
 
   Future<Movie> fetchMovie(int id) async {
     Movie m;
-    if (cachedMovie.containsKey(id)) {
-      m = cachedMovie[id];
+    if (await movieDB.isMovieStored(id)) {
+      m = await movieDB.getMovie(id);
     } else {
       final mov = await movieApiProvider.fetchMovie(id);
-      cachedMovie[id] = mov;
+      await movieDB.addMovie(mov);
       m = mov;
     }
     m.favorite = await movieDB.isFavorite(id);

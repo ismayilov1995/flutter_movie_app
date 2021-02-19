@@ -4,11 +4,17 @@ import 'package:movie_app/models/models.dart';
 
 Movie movieFromMap(String str) => Movie.fromMap(json.decode(str));
 
+String movieToMap(Movie data) => json.encode(data.toMap());
+
+Map<String, dynamic> movieToMapSqf(Movie data) => {
+      'id': data.id,
+      'movie': json.encode(data.toMapSqf()),
+    };
+
 class Movie {
   Movie({
     this.adult,
     this.backdropPath,
-    this.belongsToCollection,
     this.budget,
     this.genres,
     this.homepage,
@@ -37,7 +43,6 @@ class Movie {
 
   bool adult;
   String backdropPath;
-  BelongsToCollection belongsToCollection;
   int budget;
   List<Genre> genres;
   String homepage;
@@ -83,8 +88,6 @@ class Movie {
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
         backdropPath: 'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
-        belongsToCollection:
-            BelongsToCollection.fromMap(json["belongs_to_collection"]),
         budget: json["budget"],
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
         homepage: json["homepage"],
@@ -110,7 +113,7 @@ class Movie {
         tagline: json["tagline"],
         title: json["title"],
         video: json["video"],
-        voteAverage: json["vote_average"],
+        voteAverage: json["vote_average"].toDouble(),
         voteCount: json["vote_count"],
       );
 
@@ -128,6 +131,23 @@ class Movie {
             .toList(),
       );
 
+  factory Movie.fromSqfMap(Map<String, dynamic> json) => Movie(
+        genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
+        adult: json["adult"],
+        backdropPath: json["backdrop_path"],
+        id: json["id"],
+        originalLanguage: json["original_language"],
+        originalTitle: json["original_title"],
+        overview: json["overview"],
+        popularity: json["popularity"],
+        posterPath: json["poster_path"],
+        releaseDate: DateTime.parse(json["release_date"]),
+        title: json["title"],
+        video: json["video"],
+        voteAverage: json["vote_average"],
+        voteCount: json["vote_count"],
+      );
+
   Map<String, dynamic> toMap() => {
         "id": id,
         "title": title,
@@ -138,88 +158,22 @@ class Movie {
         "vote_average": voteAverage,
         "genres": genres.map((x) => x.name).toList().toString(),
       };
-}
 
-class BelongsToCollection {
-  BelongsToCollection({
-    this.id,
-    this.name,
-    this.posterPath,
-    this.backdropPath,
-  });
-
-  int id;
-  String name;
-  String posterPath;
-  String backdropPath;
-
-  factory BelongsToCollection.fromMap(Map<String, dynamic> json) {
-    if (json == null) return BelongsToCollection();
-    return BelongsToCollection(
-      id: json["id"],
-      name: json["name"],
-      posterPath: json["poster_path"],
-      backdropPath: json["backdrop_path"],
-    );
-  }
-}
-
-class ProductionCompany {
-  ProductionCompany({
-    this.id,
-    this.logoPath,
-    this.name,
-    this.originCountry,
-  });
-
-  int id;
-  String logoPath;
-  String name;
-  String originCountry;
-
-  factory ProductionCompany.fromMap(Map<String, dynamic> json) {
-    if (json == null) return ProductionCompany();
-    return ProductionCompany(
-      id: json["id"],
-      logoPath: json["logo_path"] == null ? null : json["logo_path"],
-      name: json["name"],
-      originCountry: json["origin_country"],
-    );
-  }
-}
-
-class ProductionCountry {
-  ProductionCountry({
-    this.iso31661,
-    this.name,
-  });
-
-  String iso31661;
-  String name;
-
-  factory ProductionCountry.fromMap(Map<String, dynamic> json) {
-    if (json == null) return ProductionCountry();
-    return ProductionCountry(
-      iso31661: json["iso_3166_1"],
-      name: json["name"],
-    );
-  }
-}
-
-class SpokenLanguage {
-  SpokenLanguage({
-    this.englishName,
-    this.iso6391,
-    this.name,
-  });
-
-  String englishName;
-  String iso6391;
-  String name;
-
-  factory SpokenLanguage.fromMap(Map<String, dynamic> json) => SpokenLanguage(
-        englishName: json["english_name"],
-        iso6391: json["iso_639_1"],
-        name: json["name"],
-      );
+  Map<String, dynamic> toMapSqf() => {
+        "adult": adult,
+        "backdrop_path": backdropPath,
+        "genres": List<dynamic>.from(genres.map((x) => x.toMap())),
+        "id": id,
+        "original_language": originalLanguage,
+        "original_title": originalTitle,
+        "overview": overview,
+        "popularity": popularity,
+        "poster_path": posterPath,
+        "release_date":
+            "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
+        "title": title,
+        "video": video,
+        "vote_average": voteAverage,
+        "vote_count": voteCount,
+      };
 }

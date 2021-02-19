@@ -1,0 +1,17 @@
+class ProductionCountry {
+  ProductionCountry({
+    this.iso31661,
+    this.name,
+  });
+
+  String iso31661;
+  String name;
+
+  factory ProductionCountry.fromMap(Map<String, dynamic> json) {
+    if (json == null) return ProductionCountry();
+    return ProductionCountry(
+      iso31661: json["iso_3166_1"],
+      name: json["name"],
+    );
+  }
+}

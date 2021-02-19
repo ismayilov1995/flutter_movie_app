@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:movie_app/models/item_model.dart';
+import 'package:movie_app/models/movie_response_model.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/resources/database_repository.dart';
 import 'package:movie_app/resources/repositories.dart';

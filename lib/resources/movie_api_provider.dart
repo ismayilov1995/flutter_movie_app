@@ -8,11 +8,11 @@ class MovieApiProvider {
   final apiKey = "?api_key=a354cef773ecdfdee470ac417999abd6";
   final baseUrl = "https://api.themoviedb.org/3/";
 
-  Future<ItemModel> fetchMovieList({bool isPopular = false}) async {
+  Future<MovieResponse> fetchMovieList({bool isPopular = false}) async {
     final type = isPopular ? 'movie/popular' : 'movie/now_playing';
     final response = await client.get(baseUrl + type + apiKey);
     if (response.statusCode == 200) {
-      return ItemModel.fromJson(jsonDecode(response.body), !isPopular);
+      return MovieResponse.fromJson(jsonDecode(response.body), !isPopular);
     } else {
       throw Exception('Filed to load posts');
     }

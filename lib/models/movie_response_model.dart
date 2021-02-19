@@ -1,10 +1,10 @@
 import 'package:movie_app/models/models.dart';
 
-class ItemModel {
+class MovieResponse {
   int page, totalPages, totalResults;
   List<Movie> results = [];
 
-  ItemModel.fromJson(Map<String, dynamic> json, bool isRecent) {
+  MovieResponse.fromJson(Map<String, dynamic> json, bool isRecent) {
     page = json["page"];
     results =
         List<Movie>.from(json["results"].map((x) => Movie.fromMapForHome(x)));

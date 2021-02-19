@@ -8,7 +8,7 @@ class MovieInitial extends MovieState {}
 class SuccessFetchMovies extends MovieState {
   SuccessFetchMovies({this.recent, this.popular});
 
-  final ItemModel recent, popular;
+  final MovieResponse recent, popular;
 }
 
 class FailFetchMovies extends MovieState {}
