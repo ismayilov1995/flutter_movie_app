@@ -13,7 +13,7 @@ class FavoriteMovieScreen extends StatelessWidget {
         builder: (context) => BlocProvider(
             create: (context) => MovieBloc(context.read<Repository>()),
             child: FavoriteMovieScreen()),
-      ));
+      )).then((_) => Navigator.pop(context));
 
   @override
   Widget build(BuildContext context) {

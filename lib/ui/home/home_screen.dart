@@ -75,9 +75,8 @@ class _SearchRow extends StatelessWidget {
                             child: FlatButton.icon(
                                 icon: Icon(Icons.favorite),
                                 label: Text('Favorites'),
-                                onPressed: () {
-                                  FavoriteMovieScreen.route(context);
-                                })),
+                                onPressed: () =>
+                                    FavoriteMovieScreen.route(context))),
                         PopupMenuItem(
                             value: 1,
                             child: FlatButton.icon(
