@@ -88,6 +88,7 @@ class Movie {
         backdropPath: 'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
         budget: json["budget"],
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
+        genreIds: List<int>.from(json["genres"].map((x) => x['id'])),
         homepage: json["homepage"],
         id: json["id"],
         imdbId: json["imdb_id"],
@@ -115,20 +116,6 @@ class Movie {
         voteCount: json["vote_count"],
       );
 
-  factory Movie.fromMapForSqf(Map<String, dynamic> json) => Movie(
-        id: json["id"],
-        posterPath: json["poster_path"],
-        releaseDate: DateTime.parse(json["release_date"]),
-        title: json["title"],
-        voteAverage: json["vote_average"],
-        voteCount: json["vote_count"],
-        genres: json["genres"]
-            .toString()
-            .split(',')
-            .map((e) => Genre(name: e))
-            .toList(),
-      );
-
   factory Movie.fromSqfMap(Map<String, dynamic> json) => Movie(
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
         adult: json["adult"],
@@ -150,6 +137,7 @@ class Movie {
         "adult": adult,
         "backdrop_path": backdropPath,
         "genres": List<dynamic>.from(genres.map((x) => x.toMap())),
+        "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
         "id": id,
         "original_language": originalLanguage,
         "original_title": originalTitle,

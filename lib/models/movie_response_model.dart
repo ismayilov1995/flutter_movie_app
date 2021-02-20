@@ -17,4 +17,11 @@ class MovieResponse {
       results.sort((a, b) => b.popularity.compareTo(a.popularity));
     }
   }
+
+  Map<String, dynamic> toMap() => {
+    "page": page,
+    "results": List<dynamic>.from(results.map((x) => x.toMapSqf())),
+    "total_pages": totalPages,
+    "total_results": totalResults,
+  };
 }
