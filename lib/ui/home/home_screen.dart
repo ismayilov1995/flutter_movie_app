@@ -67,11 +67,31 @@ class _SearchRow extends StatelessWidget {
                     fontSize: 30,
                     fontWeight: FontWeight.w700),
               ),
-              FlatButton.icon(
-                icon: Icon(Icons.favorite),
-                label: Text('Favorites'),
-                onPressed: () => FavoriteMovieScreen.route(context),
-              ),
+              PopupMenuButton(
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                            value: 0,
+                            child: FlatButton.icon(
+                                icon: Icon(Icons.favorite),
+                                label: Text('Favorites'),
+                                onPressed: () {
+                                  FavoriteMovieScreen.route(context);
+                                  Navigator.pop(context);
+                                })),
+                        PopupMenuItem(
+                            value: 1,
+                            child: FlatButton.icon(
+                              icon: Icon(Icons.clear_all),
+                              label: Text('Clear cache'),
+                              onPressed: () {
+                                context
+                                    .read<MovieBloc>()
+                                    .add(ClearMovieCache());
+                                Navigator.pop(context);
+                              },
+                            )),
+                      ])
             ],
           ),
           SizedBox(height: 6),
