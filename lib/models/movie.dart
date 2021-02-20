@@ -72,7 +72,9 @@ class Movie {
 
   factory Movie.fromMapForHome(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+        backdropPath: json["backdrop_path"] != null
+            ? json["backdrop_path"]
+            : json["poster_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
         originalLanguage: json["original_language"],
