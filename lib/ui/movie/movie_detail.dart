@@ -85,6 +85,7 @@ class _MovieDetailState extends State<MovieDetail> {
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               children: [

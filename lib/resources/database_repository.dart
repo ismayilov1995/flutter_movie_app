@@ -99,7 +99,7 @@ class DatabaseRepository {
     final db = await _getDb();
     final res =
         await db.rawQuery('SELECT * FROM $_movieTable WHERE id=?', [id]);
-    return Movie.fromSqfMap(jsonDecode(res.first['movie']));
+    return Movie.fromMap(jsonDecode(res.first['movie']));
   }
 
   Future<bool> isMovieStored(int movieID) async {

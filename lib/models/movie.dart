@@ -6,7 +6,7 @@ Movie movieFromMap(String str) => Movie.fromMap(json.decode(str));
 
 Map<String, dynamic> movieToMapSqf(Movie data) => {
       'id': data.id,
-      'movie': json.encode(data.toMapSqf()),
+      'movie': json.encode(data.toMap()),
     };
 
 class Movie {
@@ -67,6 +67,7 @@ class Movie {
   List<int> genreIds;
 
   String get poster => 'https://image.tmdb.org/t/p/w185' + posterPath;
+
   String get backdrop => 'https://image.tmdb.org/t/p/w185' + backdropPath;
 
   factory Movie.fromMapForHome(Map<String, dynamic> json) => Movie(
@@ -91,7 +92,6 @@ class Movie {
         backdropPath: json["backdrop_path"],
         budget: json["budget"],
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
-        genreIds: List<int>.from(json["genres"].map((x) => x['id'])),
         homepage: json["homepage"],
         id: json["id"],
         imdbId: json["imdb_id"],
@@ -118,6 +118,37 @@ class Movie {
         voteAverage: json["vote_average"].toDouble(),
         voteCount: json["vote_count"],
       );
+
+  Map<String, dynamic> toMap() => {
+        "adult": adult,
+        "backdrop_path": backdropPath,
+        "budget": budget,
+        "genres": List<dynamic>.from(genres.map((x) => x.toMap())),
+        "homepage": homepage,
+        "id": id,
+        "imdb_id": imdbId,
+        "original_language": originalLanguage,
+        "original_title": originalTitle,
+        "overview": overview,
+        "popularity": popularity,
+        "poster_path": posterPath,
+        "production_companies":
+            List<dynamic>.from(productionCompanies.map((x) => x.toMap())),
+        "production_countries":
+            List<dynamic>.from(productionCountries.map((x) => x.toMap())),
+        "release_date":
+            "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
+        "revenue": revenue,
+        "runtime": runtime,
+        "spoken_languages":
+            List<dynamic>.from(spokenLanguages.map((x) => x.toMap())),
+        "status": status,
+        "tagline": tagline,
+        "title": title,
+        "video": video,
+        "vote_average": voteAverage,
+        "vote_count": voteCount,
+      };
 
   factory Movie.fromSqfMap(Map<String, dynamic> json) => Movie(
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),

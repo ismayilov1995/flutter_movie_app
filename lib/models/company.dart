@@ -20,4 +20,11 @@ class ProductionCompany {
       originCountry: json["origin_country"],
     );
   }
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "logo_path": logoPath,
+    "name": name,
+    "origin_country": originCountry,
+  };
 }
