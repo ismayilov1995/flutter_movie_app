@@ -12,6 +12,7 @@ class DatabaseRepository {
 
   String _favoriteTable = 'favorites';
   String _movieTable = 'movie';
+  String _moviesListTable = 'movies_list';
 
   DatabaseRepository._internal();
 
@@ -39,6 +40,8 @@ class DatabaseRepository {
     await db.execute('CREATE TABLE $_favoriteTable(id INTEGER PRIMARY KEY)');
     await db.execute(
         'CREATE TABLE $_movieTable(id INTEGER PRIMARY KEY, movie TEXT)');
+    await db.execute(
+        'CREATE TABLE $_moviesListTable(id INTEGER PRIMARY KEY, movies TEXT)');
   }
 
   Future<bool> favoriteMovie(int id) async {
@@ -121,5 +124,31 @@ class DatabaseRepository {
     final res = await db.rawQuery(
         'DELETE FROM $_movieTable WHERE id NOT IN $fields', list);
     return res.length > 0;
+  }
+
+  Future<bool> hasStoredMovies() async {
+    final db = await _getDb();
+    return (await db.rawQuery('SELECT id FROM $_moviesListTable WHERE id=1'))
+            .length >
+        0;
+  }
+
+  Future<bool> addMoviesList(MovieResponse movieResponse) async {
+    final db = await _getDb();
+    if (!await hasStoredMovies()) {
+      await db.insert(
+          _moviesListTable, MovieResponse.movieResponseToMapSqf(movieResponse));
+    } else {
+      return true;
+    }
+    return true;
+  }
+
+  Future<MovieResponse> getMoviesList() async {
+    final db = await _getDb();
+    final list =
+        await db.rawQuery('SELECT * FROM $_moviesListTable WHERE id=1');
+    final mr = MovieResponse.movieResponseFromMap(list.first['movies']);
+    return mr;
   }
 }

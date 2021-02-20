@@ -6,15 +6,21 @@ class Repository {
   final movieApiProvider = MovieApiProvider();
   final movieDB = DatabaseRepository();
 
-  Map<int, Movie> cachedMovie = Map();
   Map<int, TrailersModel> cachedTrailer = Map();
 
-  Future<MovieResponse> fetchAllMovies({bool isPopular}) =>
-      movieApiProvider.fetchMovieList(isPopular: isPopular);
+  Future<MovieResponse> fetchAllMovies({bool isPopular}) async {
+    if (!isPopular && await movieDB.hasStoredMovies()) {
+      final dbRes = await movieDB.getMoviesList();
+      print(dbRes.results[0].title);
+    }
+    final res = await movieApiProvider.fetchMovieList(isPopular: isPopular);
+    await movieDB.addMoviesList(res);
+    return res;
+  }
 
   Future<GenresModel> fetchGenreList() => movieApiProvider.fetchGenreList();
 
-  Future<Movie> fetchMovie(int id, {bool refresh=false}) async {
+  Future<Movie> fetchMovie(int id, {bool refresh = false}) async {
     Movie m;
     if (await movieDB.isMovieStored(id) && !refresh) {
       m = await movieDB.getMovie(id);

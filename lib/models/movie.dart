@@ -136,7 +136,9 @@ class Movie {
   Map<String, dynamic> toMapSqf() => {
         "adult": adult,
         "backdrop_path": backdropPath,
-        "genres": List<dynamic>.from(genres.map((x) => x.toMap())),
+        "genres": genres != null
+            ? List<dynamic>.from(genres.map((x) => x.toMap()))
+            : [],
         "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
         "id": id,
         "original_language": originalLanguage,

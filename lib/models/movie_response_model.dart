@@ -1,10 +1,34 @@
+import 'dart:convert';
+
 import 'package:movie_app/models/models.dart';
 
 class MovieResponse {
-  int page, totalPages, totalResults;
-  List<Movie> results = [];
+  static MovieResponse movieResponseFromMap(String str, {bool isRecent=false}) =>
+      MovieResponse.fromMap(json.decode(str), isRecent);
 
-  MovieResponse.fromJson(Map<String, dynamic> json, bool isRecent) {
+  static String movieResponseToMap(MovieResponse data) =>
+      json.encode(data.toMap());
+
+  static Map<String, dynamic> movieResponseToMapSqf(
+          MovieResponse movieResponse) =>
+      {
+        "id": 1,
+        "movies": movieResponseToMap(movieResponse),
+      };
+
+  MovieResponse({
+    this.page,
+    this.results,
+    this.totalPages,
+    this.totalResults,
+  });
+
+  int page;
+  List<Movie> results;
+  int totalPages;
+  int totalResults;
+
+  MovieResponse.fromMap(Map<String, dynamic> json, bool isRecent) {
     page = json["page"];
     results =
         List<Movie>.from(json["results"].map((x) => Movie.fromMapForHome(x)));
@@ -19,9 +43,9 @@ class MovieResponse {
   }
 
   Map<String, dynamic> toMap() => {
-    "page": page,
-    "results": List<dynamic>.from(results.map((x) => x.toMapSqf())),
-    "total_pages": totalPages,
-    "total_results": totalResults,
-  };
+        "page": page,
+        "results": List<dynamic>.from(results.map((x) => x.toMapSqf())),
+        "total_pages": totalPages,
+        "total_results": totalResults,
+      };
 }

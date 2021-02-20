@@ -12,7 +12,7 @@ class MovieApiProvider {
     final type = isPopular ? 'movie/popular' : 'movie/now_playing';
     final response = await client.get(baseUrl + type + apiKey);
     if (response.statusCode == 200) {
-      return MovieResponse.fromJson(jsonDecode(response.body), !isPopular);
+      return MovieResponse.fromMap(jsonDecode(response.body), !isPopular);
     } else {
       throw Exception('Filed to load posts');
     }
