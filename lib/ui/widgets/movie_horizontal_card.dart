@@ -24,7 +24,7 @@ class MovieHorizontalCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MovieCard(
-          posterPath: m.posterPath,
+          posterPath: m.poster,
           onPress: () => MovieDetail.route(context, m.id),
         ),
         Expanded(

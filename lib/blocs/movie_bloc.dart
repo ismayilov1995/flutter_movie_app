@@ -15,7 +15,7 @@ part 'movie_state.dart';
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   MovieBloc(this._repository) : super(MovieInitial());
   final Repository _repository;
-  final sqfRepository = DatabaseRepository();
+  final movieDB = DatabaseRepository();
 
   @override
   Stream<MovieState> mapEventToState(
@@ -25,6 +25,8 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       yield SuccessFetchMovies();
       try {
         if (state is SuccessFetchMovies) {
+          final cached = await movieDB.getMoviesList();
+          yield SuccessFetchMovies(recent: cached, popular: cached);
           final recRes = await _repository.fetchAllMovies(isPopular: false);
           yield SuccessFetchMovies(recent: recRes);
           final popRes = await _repository.fetchAllMovies(isPopular: true);
@@ -57,7 +59,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     } else if (event is AddToFavorite) {
       final s = (state as SuccessFetchMovie);
       try {
-        s.movie.favorite = await sqfRepository.favoriteMovie(event.movieID);
+        s.movie.favorite = await movieDB.favoriteMovie(event.movieID);
         yield SuccessFavoriteMovie(s.movie.favorite ? 'Added' : 'Removed');
         yield s;
       } catch (e) {
@@ -66,7 +68,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       }
     } else if (event is FetchFavorites) {
       try {
-        final res = await sqfRepository.getFavoritesMovie();
+        final res = await movieDB.getFavoritesMovie();
         yield SuccessFetchFavoriteMovies(res);
       } catch (e) {
         print(e);
@@ -74,7 +76,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     } else if (event is RemoveFavorites) {
       try {
         final s = (state as SuccessFetchFavoriteMovies);
-        await sqfRepository.removeFavoritesMovie(event.movieID);
+        await movieDB.removeFavoritesMovie(event.movieID);
         yield SuccessFetchFavoriteMovies(
             s.movies.where((e) => e.id != event.movieID).toList());
       } catch (e) {
@@ -82,14 +84,14 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       }
     } else if (event is ClearFavorites) {
       try {
-        await sqfRepository.removeAllFavorites();
+        await movieDB.removeAllFavorites();
         yield SuccessFetchFavoriteMovies([]);
       } catch (e) {
         print(e);
       }
     } else if (event is ClearMovieCache) {
       try {
-        await sqfRepository.removeMovies();
+        await movieDB.removeMovies();
         print('Cache cleared');
       } catch (e) {
         print(e);

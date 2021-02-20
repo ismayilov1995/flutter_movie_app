@@ -10,9 +10,9 @@ class Repository {
   Map<int, TrailersModel> cachedTrailer = Map();
 
   Future<MovieResponse> fetchAllMovies({bool isPopular}) async {
-    // if (await movieDB.hasStoredMovies()) return await movieDB.getMoviesList();
-    final res = await movieApiProvider.fetchMovieList(isPopular: isPopular);
-    // await movieDB.addMoviesList(res);
+    MovieResponse res;
+    res = await movieApiProvider.fetchMovieList(isPopular: isPopular);
+    await movieDB.addMoviesList(res);
     return res;
   }
 

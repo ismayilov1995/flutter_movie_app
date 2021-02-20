@@ -139,6 +139,8 @@ class DatabaseRepository {
       await db.insert(
           _moviesListTable, MovieResponse.movieResponseToMapSqf(movieResponse));
     } else {
+      await db.rawUpdate('UPDATE $_moviesListTable SET movies=?',
+          [MovieResponse.movieResponseToMap(movieResponse)]);
       return true;
     }
     return true;

@@ -66,16 +66,19 @@ class Movie {
   bool favorite;
   List<int> genreIds;
 
+  String get poster => 'https://image.tmdb.org/t/p/w185' + posterPath;
+  String get backdrop => 'https://image.tmdb.org/t/p/w185' + backdropPath;
+
   factory Movie.fromMapForHome(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
-        backdropPath: 'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
+        backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
         originalLanguage: json["original_language"],
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
-        posterPath: 'https://image.tmdb.org/t/p/w185' + json["poster_path"],
+        posterPath: json["poster_path"],
         releaseDate: DateTime.parse(json["release_date"]),
         title: json["title"],
         video: json["video"],
@@ -85,7 +88,7 @@ class Movie {
 
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
-        backdropPath: 'https://image.tmdb.org/t/p/w185' + json["backdrop_path"],
+        backdropPath: json["backdrop_path"],
         budget: json["budget"],
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
         genreIds: List<int>.from(json["genres"].map((x) => x['id'])),
@@ -96,7 +99,7 @@ class Movie {
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
-        posterPath: 'https://image.tmdb.org/t/p/w185' + json["poster_path"],
+        posterPath: json["poster_path"],
         productionCompanies: List<ProductionCompany>.from(
             json["production_companies"]
                 .map((x) => ProductionCompany.fromMap(x))),

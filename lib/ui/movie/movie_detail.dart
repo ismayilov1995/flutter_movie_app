@@ -97,7 +97,7 @@ class _MovieDetailState extends State<MovieDetail> {
                           fit: BoxFit.cover,
                           alignment: Alignment.topCenter,
                           image: ExtendedNetworkImageProvider(
-                            movie.posterPath.replaceAll('w185', 'w400'),
+                            movie.poster.replaceAll('w185', 'w400'),
                             cache: true,
                           ))),
                   child: Stack(
@@ -202,7 +202,7 @@ class _MovieDetailState extends State<MovieDetail> {
             detailCard(
               title: 'Trailers',
               child:
-                  TrailersCol(trailersModel, backdropPath: movie.backdropPath),
+                  TrailersCol(trailersModel, backdropPath: movie.backdrop),
             ),
           ],
         ),

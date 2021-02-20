@@ -77,7 +77,6 @@ class _SearchRow extends StatelessWidget {
                                 label: Text('Favorites'),
                                 onPressed: () {
                                   FavoriteMovieScreen.route(context);
-                                  Navigator.pop(context);
                                 })),
                         PopupMenuItem(
                             value: 1,
@@ -128,7 +127,7 @@ class _RecentMoviesRow extends StatelessWidget {
                           final m = state.recent.results[i];
                           return MovieCard(
                             title: m.title,
-                            posterPath: m.posterPath,
+                            posterPath: m.poster,
                             onPress: () => MovieDetail.route(context, m.id),
                           );
                         }))
