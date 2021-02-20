@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/resources/database_repository.dart';
 import 'package:movie_app/resources/movie_api_provider.dart';
@@ -5,16 +7,12 @@ import 'package:movie_app/resources/movie_api_provider.dart';
 class Repository {
   final movieApiProvider = MovieApiProvider();
   final movieDB = DatabaseRepository();
-
   Map<int, TrailersModel> cachedTrailer = Map();
 
   Future<MovieResponse> fetchAllMovies({bool isPopular}) async {
-    if (!isPopular && await movieDB.hasStoredMovies()) {
-      final dbRes = await movieDB.getMoviesList();
-      print(dbRes.results[0].title);
-    }
+    // if (await movieDB.hasStoredMovies()) return await movieDB.getMoviesList();
     final res = await movieApiProvider.fetchMovieList(isPopular: isPopular);
-    await movieDB.addMoviesList(res);
+    // await movieDB.addMoviesList(res);
     return res;
   }
 
