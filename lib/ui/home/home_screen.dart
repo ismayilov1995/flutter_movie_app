@@ -38,70 +38,37 @@ class _HomeScreenBody extends StatelessWidget {
               child: ListView(
                 primary: false,
                 children: [
-                  _SearchRow(),
+                  SearchRow(
+                      child: PopupMenuButton(
+                          icon: Icon(Icons.more_vert),
+                          itemBuilder: (context) => [
+                                PopupMenuItem(
+                                    value: 0,
+                                    child: FlatButton.icon(
+                                        icon: Icon(Icons.favorite),
+                                        label: Text('Favorites'),
+                                        onPressed: () =>
+                                            FavoriteMovieScreen.route(
+                                                context))),
+                                PopupMenuItem(
+                                    value: 1,
+                                    child: FlatButton.icon(
+                                      icon: Icon(Icons.clear_all),
+                                      label: Text('Clear cache'),
+                                      onPressed: () {
+                                        context
+                                            .read<MovieBloc>()
+                                            .add(ClearMovieCache());
+                                        Navigator.pop(context);
+                                      },
+                                    )),
+                              ])),
                   _RecentMoviesRow(),
                   _PopularMoviesRow(state.genresModel),
                 ],
               ),
             )
           : Center(child: CircularProgressIndicator()),
-    );
-  }
-}
-
-class _SearchRow extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Search',
-                style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700),
-              ),
-              PopupMenuButton(
-                  icon: Icon(Icons.more_vert),
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                            value: 0,
-                            child: FlatButton.icon(
-                                icon: Icon(Icons.favorite),
-                                label: Text('Favorites'),
-                                onPressed: () =>
-                                    FavoriteMovieScreen.route(context))),
-                        PopupMenuItem(
-                            value: 1,
-                            child: FlatButton.icon(
-                              icon: Icon(Icons.clear_all),
-                              label: Text('Clear cache'),
-                              onPressed: () {
-                                context
-                                    .read<MovieBloc>()
-                                    .add(ClearMovieCache());
-                                Navigator.pop(context);
-                              },
-                            )),
-                      ])
-            ],
-          ),
-          SizedBox(height: 6),
-          TextField(
-            style: TextStyle(color: kTextColor, fontSize: 28),
-            decoration: InputDecoration.collapsed(
-                hintText: 'Movie, Actors, Directors...',
-                hintStyle: TextStyle(color: kTextColor, fontSize: 28),
-                border: UnderlineInputBorder()),
-          ),
-        ],
-      ),
     );
   }
 }
