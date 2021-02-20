@@ -44,4 +44,15 @@ class MovieApiProvider {
       throw Exception('Filed to load trailers');
     }
   }
+
+  Future<MovieResponse> searchMovie(String query) async {
+    final path = '${baseUrl}search/multi$apiKey&query=$query&include_adult=true';
+    final res = await client.get(path);
+    if (res.statusCode == 200) {
+      print(res.body);
+      return MovieResponse.fromMap(jsonDecode(res.body), false);
+    } else {
+      throw Exception('Filed to load search');
+    }
+  }
 }

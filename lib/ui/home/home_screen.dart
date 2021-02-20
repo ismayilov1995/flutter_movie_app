@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/genre/genre_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
+import 'package:movie_app/blocs/search/search_cubit.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/movie/favorite_movie_screen.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatelessWidget {
             builder: (context) => MultiBlocProvider(providers: [
                   BlocProvider<MovieBloc>(create: (context) => MovieBloc(repo)),
                   BlocProvider<GenreBloc>(create: (context) => GenreBloc(repo)),
+                  BlocProvider<SearchCubit>(create: (context) => SearchCubit(repo)),
                 ], child: HomeScreen())));
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/blocs/search/search_cubit.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchRow extends StatelessWidget {
   SearchRow({this.child});
@@ -8,6 +10,7 @@ class SearchRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String query;
     return Container(
       margin: EdgeInsets.all(20.0),
       child: Column(
@@ -27,13 +30,21 @@ class SearchRow extends StatelessWidget {
             ],
           ),
           SizedBox(height: 6),
-          TextField(
+          TextFormField(
+            onChanged: (v) => query = v,
             style: TextStyle(color: kTextColor, fontSize: 28),
             decoration: InputDecoration.collapsed(
                 hintText: 'Movie, Actors, Directors...',
                 hintStyle: TextStyle(color: kTextColor, fontSize: 28),
                 border: UnderlineInputBorder()),
           ),
+          FlatButton(
+            child: Text('Search'),
+            onPressed: () {
+              print(query);
+              context.read<SearchCubit>().searchMovie(query);
+            },
+          )
         ],
       ),
     );

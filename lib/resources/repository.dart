@@ -46,4 +46,8 @@ class Repository {
     }
     return cachedTrailer[id];
   }
+
+  Future<MovieResponse> searchMovies(String query) {
+    return movieApiProvider.searchMovie(query);
+  }
 }
