@@ -1,4 +1,11 @@
+import 'dart:convert';
+
 class GenresModel {
+  static GenresModel genresModelFromMap(String str) =>
+      GenresModel.fromMap(json.decode(str));
+
+  static String movieToMap(GenresModel data) => json.encode(data.toMap());
+
   GenresModel({
     this.genres,
   });
@@ -8,6 +15,10 @@ class GenresModel {
   factory GenresModel.fromMap(Map<String, dynamic> json) => GenresModel(
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
       );
+
+  Map<String, dynamic> toMap() => {
+        "genres": List<dynamic>.from(genres.map((x) => x.toMap())),
+      };
 
   String getGenreTitle(List<int> genreIds) {
     String titledGenres = "";

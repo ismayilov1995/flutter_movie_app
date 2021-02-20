@@ -12,11 +12,20 @@ class Repository {
   Future<MovieResponse> fetchAllMovies({bool isPopular}) async {
     MovieResponse res;
     res = await movieApiProvider.fetchMovieList(isPopular: isPopular);
-    await movieDB.addMoviesList(res);
+    if (isPopular) await movieDB.addMoviesList(res);
     return res;
   }
 
-  Future<GenresModel> fetchGenreList() => movieApiProvider.fetchGenreList();
+  Future<GenresModel> fetchGenreList() async {
+    GenresModel genresModel;
+    if (await movieDB.hasStoredGenres()) {
+      genresModel = await movieDB.getGenres();
+    } else {
+      genresModel = await movieApiProvider.fetchGenreList();
+      await movieDB.addGenres(genresModel);
+    }
+    return genresModel;
+  }
 
   Future<Movie> fetchMovie(int id, {bool refresh = false}) async {
     Movie m;

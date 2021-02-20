@@ -22,16 +22,15 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     MovieEvent event,
   ) async* {
     if (event is FetchAllMovies) {
-      yield SuccessFetchMovies();
       try {
-        if (state is SuccessFetchMovies) {
-          final cached = await movieDB.getMoviesList();
+        if (await movieDB.hasStoredMovies()) {
+          var cached = await movieDB.getMoviesList();
           yield SuccessFetchMovies(recent: cached, popular: cached);
-          final recRes = await _repository.fetchAllMovies(isPopular: false);
-          yield SuccessFetchMovies(recent: recRes);
-          final popRes = await _repository.fetchAllMovies(isPopular: true);
-          yield SuccessFetchMovies(recent: recRes, popular: popRes);
         }
+        final recRes = await _repository.fetchAllMovies(isPopular: false);
+        yield SuccessFetchMovies(recent: recRes);
+        final popRes = await _repository.fetchAllMovies(isPopular: true);
+        yield SuccessFetchMovies(recent: recRes, popular: popRes);
       } catch (e) {
         print(e);
         yield FailFetchMovies();

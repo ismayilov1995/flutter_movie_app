@@ -13,6 +13,7 @@ class DatabaseRepository {
   String _favoriteTable = 'favorites';
   String _movieTable = 'movie';
   String _moviesListTable = 'movies_list';
+  String _genresTable = 'genres_list';
 
   DatabaseRepository._internal();
 
@@ -42,6 +43,8 @@ class DatabaseRepository {
         'CREATE TABLE $_movieTable(id INTEGER PRIMARY KEY, movie TEXT)');
     await db.execute(
         'CREATE TABLE $_moviesListTable(id INTEGER PRIMARY KEY, movies TEXT)');
+    await db.execute(
+        'CREATE TABLE $_genresTable(id INTEGER PRIMARY KEY, genres TEXT)');
   }
 
   Future<bool> favoriteMovie(int id) async {
@@ -78,20 +81,17 @@ class DatabaseRepository {
     return res > 0;
   }
 
-  Future<bool> removeAllFavorites() async {
+  Future<void> removeAllFavorites() async {
     final db = await _getDb();
-    final res = await db.delete(_favoriteTable);
-    return res > 0;
+    await db.delete(_favoriteTable);
   }
 
-  Future<bool> addMovie(Movie movie) async {
+  Future<void> addMovie(Movie movie) async {
     if (await isMovieStored(movie.id)) {
       await removeMovie(movie.id);
-      return false;
     } else {
       final db = await _getDb();
-      final res = await db.insert(_movieTable, movieToMapSqf(movie));
-      return res > 0;
+      await db.insert(_movieTable, movieToMapSqf(movie));
     }
   }
 
@@ -109,21 +109,18 @@ class DatabaseRepository {
     return res.length > 0;
   }
 
-  Future<bool> removeMovie(int id) async {
+  Future<void> removeMovie(int id) async {
     final db = await _getDb();
-    final res = await db.rawQuery('DELETE FROM $_movieTable WHERE id=?', [id]);
-    return res.length > 0;
+    await db.rawQuery('DELETE FROM $_movieTable WHERE id=?', [id]);
   }
 
-  Future<bool> removeMovies() async {
+  Future<void> removeMovies() async {
     // Remove movies except Favorite movies
     final db = await _getDb();
     final favMoviesID = await db.rawQuery('SELECT * FROM $_favoriteTable');
     final list = favMoviesID.map((e) => e['id']).toList();
     final fields = list.map((e) => '?').toString();
-    final res = await db.rawQuery(
-        'DELETE FROM $_movieTable WHERE id NOT IN $fields', list);
-    return res.length > 0;
+    await db.rawQuery('DELETE FROM $_movieTable WHERE id NOT IN $fields', list);
   }
 
   Future<bool> hasStoredMovies() async {
@@ -133,7 +130,7 @@ class DatabaseRepository {
         0;
   }
 
-  Future<bool> addMoviesList(MovieResponse movieResponse) async {
+  Future<void> addMoviesList(MovieResponse movieResponse) async {
     final db = await _getDb();
     if (!await hasStoredMovies()) {
       await db.insert(
@@ -141,9 +138,7 @@ class DatabaseRepository {
     } else {
       await db.rawUpdate('UPDATE $_moviesListTable SET movies=?',
           [MovieResponse.movieResponseToMap(movieResponse)]);
-      return true;
     }
-    return true;
   }
 
   Future<MovieResponse> getMoviesList() async {
@@ -152,5 +147,29 @@ class DatabaseRepository {
         await db.rawQuery('SELECT * FROM $_moviesListTable WHERE id=1');
     final mr = MovieResponse.movieResponseFromMap(list.first['movies']);
     return mr;
+  }
+
+  Future<bool> hasStoredGenres() async {
+    final db = await _getDb();
+    return (await db.rawQuery('SELECT id FROM $_genresTable WHERE id=0'))
+            .length >
+        0;
+  }
+
+  Future<void> addGenres(GenresModel genresModel) async {
+    final db = await _getDb();
+    if (!await hasStoredGenres()) {
+      await db.insert(_genresTable,
+          {"id": 0, "genres": GenresModel.movieToMap(genresModel)});
+    } else {
+      await db.rawUpdate('UPDATE $_genresTable SET genres=?',
+          [GenresModel.movieToMap(genresModel)]);
+    }
+  }
+
+  Future<GenresModel> getGenres() async {
+    final db = await _getDb();
+    final list = await db.rawQuery('SELECT * FROM $_genresTable WHERE id=0');
+    return GenresModel.genresModelFromMap(list.first['genres']);
   }
 }
