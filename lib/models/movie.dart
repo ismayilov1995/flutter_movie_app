@@ -72,7 +72,8 @@ class Movie {
 
   String get backdrop => 'https://image.tmdb.org/t/p/w185' + backdropPath;
 
-  String get date => '${releaseDate.month}-${releaseDate.day}-${releaseDate.year}';
+  String get date =>
+      '${releaseDate.month}-${releaseDate.day}-${releaseDate.year}';
 
   static DateTime _getReleaseTime(String date) {
     try {
@@ -106,7 +107,7 @@ class Movie {
     originalLanguage = json["original_language"];
     originalTitle = json["original_title"] ?? '';
     overview = json["overview"] ?? '';
-    popularity = json["popularity"] ?? 0;
+    popularity = json["popularity"] != null ? json["popularity"].toDouble() : 0;
     posterPath = json["poster_path"];
     releaseDate = _getReleaseTime(json["release_date"]);
     title = json["title"] ?? 'No title';

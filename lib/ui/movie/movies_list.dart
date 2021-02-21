@@ -8,7 +8,7 @@ import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/movie/movie_detail.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
-class MoviesList extends StatelessWidget {
+class MoviesList extends StatefulWidget {
   static route(BuildContext context, {bool popular = false}) {
     Navigator.push(
         context,
@@ -23,12 +23,36 @@ class MoviesList extends StatelessWidget {
   final bool popular;
 
   @override
+  _MoviesListState createState() => _MoviesListState();
+}
+
+class _MoviesListState extends State<MoviesList> {
+  ScrollController _scrollCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollCtrl = ScrollController();
+    _scrollCtrl.addListener(() {
+      if (_scrollCtrl.position.pixels == _scrollCtrl.position.maxScrollExtent) {
+        _loadMore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    context.read<MovieBloc>().add(FetchMovies(popular));
+    context.read<MovieBloc>().add(FetchMovies(widget.popular));
     return Scaffold(
       backgroundColor: kBgColor,
       appBar: AppBar(
-        title: Text(popular ? 'POPULAR' : 'NOW PLAYING'),
+        title: Text(widget.popular ? 'POPULAR' : 'NOW PLAYING'),
         centerTitle: true,
         backgroundColor: kBgColor,
       ),
@@ -47,6 +71,7 @@ class MoviesList extends StatelessWidget {
   Widget _successLoadMovies(BuildContext context, MovieResponse movieResponse) {
     final movies = movieResponse.results;
     return GridView.builder(
+        controller: _scrollCtrl,
         padding: EdgeInsets.all(5.0),
         itemCount: movies.length + 1,
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -57,14 +82,15 @@ class MoviesList extends StatelessWidget {
                 ? Center()
                 : Center(
                     child: FlatButton(
-                        child: Text('Load more'),
-                        onPressed: () => context
-                            .read<MovieBloc>()
-                            .add(LoadMoreMovies(popular))),
+                        child: Text('Load more'), onPressed: () => _loadMore()),
                   );
           }
           return _SingleMovieCard(movies[i]);
         });
+  }
+
+  void _loadMore() {
+    context.read<MovieBloc>().add(LoadMoreMovies(widget.popular));
   }
 }
 

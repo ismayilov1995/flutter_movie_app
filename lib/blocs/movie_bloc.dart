@@ -104,6 +104,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         final res = await _repository.fetchAllMovies(isPopular: event.popular);
         yield SuccessLoadMovies(res);
       } catch (e) {
+        print(e);
         yield FailLoadMovies();
       }
     } else if (event is LoadMoreMovies) {
@@ -117,6 +118,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
           yield SuccessLoadMovies(s.movieResponse);
         }
       } catch (e) {
+        print(e);
         yield FailLoadMovies();
       }
     }

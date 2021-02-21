@@ -23,7 +23,7 @@ class MovieCard extends StatelessWidget {
                 child: CachedImage(
                   posterPath,
                   fit: BoxFit.cover,
-                  height: 180,
+                  height: 170,
                 )),
             if (title != null) ...[
               SizedBox(height: 6),
