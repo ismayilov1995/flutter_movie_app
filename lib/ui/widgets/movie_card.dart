@@ -11,11 +11,9 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return InkWell(
       onTap: onPress,
       child: Container(
-        width: size.width * 0.30,
         margin: EdgeInsets.only(left: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +27,7 @@ class MovieCard extends StatelessWidget {
                 )),
             if (title != null) ...[
               SizedBox(height: 6),
-              Text(title),
+              Container(width: 120, child: Text(title)),
             ]
           ],
         ),
