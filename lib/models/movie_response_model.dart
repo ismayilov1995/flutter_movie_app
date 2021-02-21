@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:movie_app/models/models.dart';
 
 class MovieResponse {
-  static MovieResponse movieResponseFromMap(String str, {bool isRecent=false}) =>
+  static MovieResponse movieResponseFromMap(String str,
+          {bool isRecent = false}) =>
       MovieResponse.fromMap(json.decode(str), isRecent);
 
   static String movieResponseToMap(MovieResponse data) =>
@@ -30,8 +31,9 @@ class MovieResponse {
 
   MovieResponse.fromMap(Map<String, dynamic> json, bool isRecent) {
     page = json["page"];
-    results =
-        List<Movie>.from(json["results"].map((x) => Movie.fromMapForHome(x)));
+    results = json["results"] != null
+        ? List<Movie>.from(json["results"].map((x) => Movie.fromMapForList(x)))
+        : [];
     totalPages = json["total_pages"];
     totalResults = json["total_results"];
 

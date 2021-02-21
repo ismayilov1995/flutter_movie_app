@@ -10,8 +10,18 @@ class SearchCubit extends Cubit<SearchState> {
   Repository _repository;
 
   void searchMovie(String query) async {
-    if (query == null || query.length < 4) return;
-    final res = await _repository.searchMovies(query);
-    emit(SearchState(movieResponse: res));
+    if (query == null || query.isEmpty || query.length < 4) {
+      emit(SearchState(movieResponse: null));
+    } else {
+      final res = await _repository.searchMovies(query);
+      if (res.totalResults == 0)
+        emit(SearchState(movieResponse: null, notFound: true));
+      else
+        emit(SearchState(movieResponse: res));
+    }
+  }
+
+  void clearResults() {
+    emit(SearchState(movieResponse: null));
   }
 }

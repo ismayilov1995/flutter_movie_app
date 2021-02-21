@@ -66,34 +66,57 @@ class Movie {
   bool favorite;
   List<int> genreIds;
 
-  String get poster => 'https://image.tmdb.org/t/p/w185' + posterPath;
+  String get poster => posterPath != null
+      ? 'https://image.tmdb.org/t/p/w185' + posterPath
+      : 'https://upload.wikimedia.org/wikipedia/commons/f/fc/No_picture_available.png';
 
   String get backdrop => 'https://image.tmdb.org/t/p/w185' + backdropPath;
 
-  factory Movie.fromMapForHome(Map<String, dynamic> json) => Movie(
-        adult: json["adult"],
-        backdropPath: json["backdrop_path"] != null
-            ? json["backdrop_path"]
-            : json["poster_path"],
-        genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
-        id: json["id"],
-        originalLanguage: json["original_language"],
-        originalTitle: json["original_title"],
-        overview: json["overview"],
-        popularity: json["popularity"].toDouble(),
-        posterPath: json["poster_path"],
-        releaseDate: json["release_date"] != null
-            ? DateTime.parse(json["release_date"])
-            : DateTime.now(),
-        title: json["title"],
-        video: json["video"],
-        voteAverage: json["vote_average"].toDouble(),
-        voteCount: json["vote_count"],
-      );
+  static DateTime _getReleaseTime(String date) {
+    try {
+      return DateTime.parse(date);
+    } catch (_) {
+      return DateTime.now();
+    }
+  }
+
+  static List<int> _getGenres(dynamic intList) {
+    try {
+      return List<int>.from(intList.map((x) => x));
+    } catch (_) {
+      return [];
+    }
+  }
+
+  static String _getBackdrop(String path) {
+    if (path == null) {
+      return 'https://upload.wikimedia.org/wikipedia/commons/f/fc/No_picture_available.png';
+    } else {
+      return path;
+    }
+  }
+
+  Movie.fromMapForList(Map<String, dynamic> json) {
+    adult = json["adult"] ?? false;
+    backdropPath = _getBackdrop(json['backdrop_path']);
+    genreIds = _getGenres(json["genre_ids"]);
+    id = json["id"];
+    originalLanguage = json["original_language"];
+    originalTitle = json["original_title"] ?? '';
+    overview = json["overview"] ?? '';
+    popularity = json["popularity"] ?? 0;
+    posterPath = json["poster_path"];
+    releaseDate = _getReleaseTime(json["release_date"]);
+    title = json["title"] ?? 'No title';
+    video = json["video"];
+    voteAverage =
+        json["vote_average"] != null ? json["vote_average"].toDouble() : 0;
+    voteCount = json["vote_count"] ?? 0;
+  }
 
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+        backdropPath: _getBackdrop(json['backdrop_path']),
         budget: json["budget"],
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
         homepage: json["homepage"],
@@ -110,14 +133,14 @@ class Movie {
         productionCountries: List<ProductionCountry>.from(
             json["production_countries"]
                 .map((x) => ProductionCountry.fromMap(x))),
-        releaseDate: DateTime.parse(json["release_date"]),
+        releaseDate: _getReleaseTime(json['release_date']),
         revenue: json["revenue"],
         runtime: json["runtime"],
         spokenLanguages: List<SpokenLanguage>.from(
             json["spoken_languages"].map((x) => SpokenLanguage.fromMap(x))),
         status: json["status"],
         tagline: json["tagline"],
-        title: json["title"],
+        title: json["title"] ?? 'No title',
         video: json["video"],
         voteAverage: json["vote_average"].toDouble(),
         voteCount: json["vote_count"],
@@ -157,7 +180,7 @@ class Movie {
   factory Movie.fromSqfMap(Map<String, dynamic> json) => Movie(
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
         adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+        backdropPath: _getBackdrop(json['backdrop_path']),
         id: json["id"],
         originalLanguage: json["original_language"],
         originalTitle: json["original_title"],
@@ -165,7 +188,7 @@ class Movie {
         popularity: json["popularity"],
         posterPath: json["poster_path"],
         releaseDate: DateTime.parse(json["release_date"]),
-        title: json["title"],
+        title: json["title"] != null ? json["title"] : 'No title',
         video: json["video"],
         voteAverage: json["vote_average"],
         voteCount: json["vote_count"],

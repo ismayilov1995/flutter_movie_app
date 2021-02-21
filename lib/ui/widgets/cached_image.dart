@@ -2,11 +2,11 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class CachedImage extends StatelessWidget {
-  CachedImage(this.path, {this.height, this.fit});
+  CachedImage(this.path, {this.height, this.fit, this.width});
 
   final String path;
   final BoxFit fit;
-  final double height;
+  final double height, width;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +15,7 @@ class CachedImage extends StatelessWidget {
       cache: true,
       clearMemoryCacheIfFailed: true,
       height: height,
+      width: width,
       fit: fit,
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
