@@ -72,6 +72,8 @@ class Movie {
 
   String get backdrop => 'https://image.tmdb.org/t/p/w185' + backdropPath;
 
+  String get date => '${releaseDate.month}-${releaseDate.day}-${releaseDate.year}';
+
   static DateTime _getReleaseTime(String date) {
     try {
       return DateTime.parse(date);

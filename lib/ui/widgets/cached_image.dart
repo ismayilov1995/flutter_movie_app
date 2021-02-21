@@ -2,7 +2,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class CachedImage extends StatelessWidget {
-  CachedImage(this.path, {this.height, this.fit, this.width});
+  CachedImage(this.path,
+      {this.height, this.fit = BoxFit.fitHeight, this.width});
 
   final String path;
   final BoxFit fit;
