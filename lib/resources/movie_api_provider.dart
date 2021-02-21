@@ -8,9 +8,10 @@ class MovieApiProvider {
   final apiKey = "?api_key=a354cef773ecdfdee470ac417999abd6";
   final baseUrl = "https://api.themoviedb.org/3/";
 
-  Future<MovieResponse> fetchMovieList({bool isPopular = false}) async {
+  Future<MovieResponse> fetchMovieList(
+      {bool isPopular = false, int page = 1}) async {
     final type = isPopular ? 'movie/popular' : 'movie/now_playing';
-    final response = await client.get(baseUrl + type + apiKey);
+    final response = await client.get(baseUrl + type + apiKey + '&page=$page');
     if (response.statusCode == 200) {
       return MovieResponse.fromMap(jsonDecode(response.body), !isPopular);
     } else {
@@ -46,7 +47,8 @@ class MovieApiProvider {
   }
 
   Future<MovieResponse> searchMovie(String query) async {
-    final path = '${baseUrl}search/multi$apiKey&query=$query&include_adult=true';
+    final path =
+        '${baseUrl}search/multi$apiKey&query=$query&include_adult=true';
     final res = await client.get(path);
     if (res.statusCode == 200) {
       return MovieResponse.fromMap(jsonDecode(res.body), false);

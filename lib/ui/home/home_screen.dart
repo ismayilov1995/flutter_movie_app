@@ -81,7 +81,7 @@ class _RecentMoviesRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HomeCardW(
-      title: 'Recent',
+      title: 'Now playing',
       onPress: () => MoviesList.route(context, popular: false),
       child: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {

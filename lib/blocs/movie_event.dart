@@ -41,3 +41,11 @@ class FetchMovies extends MovieEvent {
 
   final bool popular;
 }
+
+class LoadMoreMovies extends MovieEvent {
+  LoadMoreMovies(this.popular);
+
+  final bool popular;
+}
+
+

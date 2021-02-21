@@ -25,8 +25,9 @@ class MoviesList extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<MovieBloc>().add(FetchMovies(popular));
     return Scaffold(
+      backgroundColor: kBgColor,
       appBar: AppBar(
-        title: Text('MOVIES'),
+        title: Text(popular ? 'POPULAR' : 'NOW PLAYING'),
         centerTitle: true,
         backgroundColor: kBgColor,
       ),
@@ -46,10 +47,23 @@ class MoviesList extends StatelessWidget {
     final movies = movieResponse.results;
     return GridView.builder(
         padding: EdgeInsets.all(5.0),
-        itemCount: movies.length,
+        itemCount: movies.length + 1,
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200, childAspectRatio: 0.69),
-        itemBuilder: (context, i) => _SingleMovieCard(movies[i]));
+        itemBuilder: (context, i) {
+          if (i == movies.length) {
+            return movieResponse.totalPages == movieResponse.page
+                ? Center()
+                : Center(
+                    child: FlatButton(
+                        child: Text('Load more'),
+                        onPressed: () => context
+                            .read<MovieBloc>()
+                            .add(LoadMoreMovies(popular))),
+                  );
+          }
+          return _SingleMovieCard(movies[i]);
+        });
   }
 }
 
@@ -73,9 +87,7 @@ class _SingleMovieCard extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: Container(
-              constraints: BoxConstraints(
-                minHeight: 50
-              ),
+              constraints: BoxConstraints(minHeight: 50),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   gradient: LinearGradient(
