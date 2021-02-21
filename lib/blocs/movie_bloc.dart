@@ -28,9 +28,10 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
           yield SuccessFetchMovies(recent: cached, popular: cached);
         }
         final recRes = await _repository.fetchAllMovies(isPopular: false);
-        yield SuccessFetchMovies(recent: recRes);
+        if (recRes != null) yield SuccessFetchMovies(recent: recRes);
         final popRes = await _repository.fetchAllMovies(isPopular: true);
-        yield SuccessFetchMovies(recent: recRes, popular: popRes);
+        if (popRes != null)
+          yield SuccessFetchMovies(recent: recRes, popular: popRes);
       } catch (e) {
         print(e);
         yield FailFetchMovies();
@@ -44,7 +45,8 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         }
         yield SuccessFetchMovie(movie: response);
         final trailerRes = await _repository.fetchMovieTrailers(event.id);
-        yield SuccessFetchMovie(movie: response, trailersModel: trailerRes);
+        if (trailerRes != null)
+          yield SuccessFetchMovie(movie: response, trailersModel: trailerRes);
       } catch (e) {
         print(e);
         yield FailFetchMovie();

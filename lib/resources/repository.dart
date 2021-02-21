@@ -7,14 +7,18 @@ import 'package:movie_app/resources/movie_api_provider.dart';
 class Repository {
   final movieApiProvider = MovieApiProvider();
   final movieDB = DatabaseRepository();
-  Map<int, TrailersModel> cachedTrailer = Map();
 
   Future<MovieResponse> fetchAllMovies({bool isPopular, int page}) async {
-    MovieResponse res;
-    res =
-        await movieApiProvider.fetchMovieList(isPopular: isPopular, page: page);
-    if (isPopular) await movieDB.addMoviesList(res);
-    return res;
+    try {
+      MovieResponse res;
+      res = await movieApiProvider.fetchMovieList(
+          isPopular: isPopular, page: page);
+      if (isPopular) await movieDB.addMoviesList(res);
+      return res;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   Future<GenresModel> fetchGenreList() async {
@@ -42,10 +46,11 @@ class Repository {
   }
 
   Future<TrailersModel> fetchMovieTrailers(int id) async {
-    if (!cachedTrailer.containsKey(id)) {
-      cachedTrailer[id] = await movieApiProvider.fetchMovieTrailers(id);
+    try {
+      return await movieApiProvider.fetchMovieTrailers(id);
+    } catch (e) {
+      return null;
     }
-    return cachedTrailer[id];
   }
 
   Future<MovieResponse> searchMovies(String query) {

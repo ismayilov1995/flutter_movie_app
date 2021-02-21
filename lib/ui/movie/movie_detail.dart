@@ -201,10 +201,10 @@ class _MovieDetailState extends State<MovieDetail> {
               child: AppText(movie.overview, fontSize: 18),
             ),
             detailCard(
-              title: 'Trailers',
-              child:
-                  TrailersCol(trailersModel, backdropPath: movie.backdrop),
-            ),
+                title: 'Trailers',
+                child: trailersModel != null
+                    ? TrailersCol(trailersModel, backdropPath: movie.backdrop)
+                    : Text('You haven\'t internet connection')),
           ],
         ),
       ),
