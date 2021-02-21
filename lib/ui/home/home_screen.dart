@@ -8,6 +8,7 @@ import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/movie/favorite_movie_screen.dart';
 import 'package:movie_app/ui/movie/movie_detail.dart';
+import 'package:movie_app/ui/movie/movies_list.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,7 +20,8 @@ class HomeScreen extends StatelessWidget {
             builder: (context) => MultiBlocProvider(providers: [
                   BlocProvider<MovieBloc>(create: (context) => MovieBloc(repo)),
                   BlocProvider<GenreBloc>(create: (context) => GenreBloc(repo)),
-                  BlocProvider<SearchCubit>(create: (context) => SearchCubit(repo)),
+                  BlocProvider<SearchCubit>(
+                      create: (context) => SearchCubit(repo)),
                 ], child: HomeScreen())));
   }
 
@@ -80,6 +82,7 @@ class _RecentMoviesRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomeCardW(
       title: 'Recent',
+      onPress: () => MoviesList.route(context, popular: false),
       child: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {
           if (state is SuccessFetchMovies) {
@@ -119,7 +122,10 @@ class _PopularMoviesRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        HomeCardTitle(title: 'Popular'),
+        HomeCardTitle(
+          title: 'Popular',
+          onPress: () => MoviesList.route(context, popular: true),
+        ),
         BlocBuilder<MovieBloc, MovieState>(
           builder: (context, state) {
             if (state is SuccessFetchMovies) {

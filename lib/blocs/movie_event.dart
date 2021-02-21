@@ -35,3 +35,9 @@ class RemoveFavorites extends MovieEvent {
 class ClearFavorites extends MovieEvent {}
 
 class ClearMovieCache extends MovieEvent {}
+
+class FetchMovies extends MovieEvent {
+  FetchMovies(this.popular);
+
+  final bool popular;
+}

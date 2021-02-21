@@ -95,6 +95,17 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       } catch (e) {
         print(e);
       }
+    } else if (event is FetchMovies) {
+      try {
+        if (await movieDB.hasStoredMovies()) {
+          var cached = await movieDB.getMoviesList();
+          yield SuccessLoadMovies(cached);
+        }
+        final res = await _repository.fetchAllMovies(isPopular: event.popular);
+        yield SuccessLoadMovies(res);
+      } catch (e) {
+        yield FailLoadMovies();
+      }
     }
   }
 }

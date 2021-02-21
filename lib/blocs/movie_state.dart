@@ -35,3 +35,11 @@ class SuccessFetchFavoriteMovies extends MovieState {
 
   final List<Movie> movies;
 }
+
+class SuccessLoadMovies extends MovieState {
+  SuccessLoadMovies(this.movieResponse);
+
+  final MovieResponse movieResponse;
+}
+
+class FailLoadMovies extends MovieState {}
