@@ -5,6 +5,7 @@ import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/models/movie_response_model.dart';
 import 'package:movie_app/resources/repositories.dart';
+import 'package:movie_app/ui/movie/movie_detail.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class MoviesList extends StatelessWidget {
@@ -76,37 +77,40 @@ class _SingleMovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: CachedImage(movie.poster),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              constraints: BoxConstraints(minHeight: 50),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.7),
-                      Colors.black,
-                    ],
-                    stops: [0, 0.2, 1],
-                  )),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(movie.title),
-              ),
+      child: InkWell(
+        onTap: () => MovieDetail.route(context, movie.id),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: CachedImage(movie.poster),
             ),
-          )
-        ],
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                constraints: BoxConstraints(minHeight: 50),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7),
+                        Colors.black,
+                      ],
+                      stops: [0, 0.2, 1],
+                    )),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(movie.title),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
