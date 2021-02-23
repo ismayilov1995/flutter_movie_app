@@ -4,11 +4,10 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/blocs/movie_bloc.dart';
+import 'package:movie_app/blocs/blocs.dart';
 import 'package:movie_app/models/models.dart';
-import 'package:movie_app/resources/notification_service.dart';
-import 'package:movie_app/resources/repositories.dart';
-import 'package:movie_app/ui/movie/favorite_movie_screen.dart';
+import 'package:movie_app/services/services.dart';
+import 'package:movie_app/ui/movie/movie.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class MovieDetail extends StatefulWidget {
@@ -17,7 +16,7 @@ class MovieDetail extends StatefulWidget {
         context,
         CupertinoPageRoute(
             builder: (context) => BlocProvider(
-                create: (context) => MovieBloc(context.read<Repository>()),
+                create: (context) => MovieBloc(context.read<MovieRepository>()),
                 child: MovieDetail(id))));
   }
 

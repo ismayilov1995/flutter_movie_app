@@ -37,7 +37,13 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FlutterLogo(size: 120),
+              Image.asset(
+                'assets/images/moviedb.png',
+                fit: BoxFit.cover,
+                width: 160,
+              ),
+              SizedBox(height: 24),
+              AppText('This app powered by TMDb', fontSize: 20),
               SizedBox(height: 24),
               CircularProgressIndicator(),
             ],
