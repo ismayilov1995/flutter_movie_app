@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:movie_app/ui/movie/movie_detail.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,7 +21,8 @@ class MovieNotificationService {
     final ios = IOSInitializationSettings();
     final initSettings = InitializationSettings(android: android, iOS: ios);
     flutterLocalNotificationsPlugin.initialize(initSettings,
-        onSelectNotification: onSelectNotification);
+        onSelectNotification: (String payload) =>
+            onSelectNotification(context, payload));
   }
 
   static final _android = AndroidNotificationDetails(
@@ -62,9 +65,10 @@ class MovieNotificationService {
     flutterLocalNotificationsPlugin.cancelAll();
   }
 
-  Future onSelectNotification(String payload) {
+  Future onSelectNotification(BuildContext context, String payload) {
     if (payload != null) {
       print('Payload is: ' + payload);
+      // MovieDetail.route(context, int.parse(payload));
     }
     return null;
   }

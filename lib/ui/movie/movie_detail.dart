@@ -31,6 +31,7 @@ class MovieDetail extends StatefulWidget {
 
 class _MovieDetailState extends State<MovieDetail> {
   Completer<void> _refreshCompleter;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -42,11 +43,12 @@ class _MovieDetailState extends State<MovieDetail> {
   Widget build(BuildContext context) {
     context.read<MovieBloc>().add(FetchMovie(this.widget.movieId));
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: kBgColor,
       body: BlocConsumer<MovieBloc, MovieState>(
         listener: (context, state) {
           if (state is SuccessFavoriteMovie) {
-            Scaffold.of(context)
+            _scaffoldKey.currentState
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
                   action: SnackBarAction(
@@ -145,26 +147,11 @@ class _MovieDetailState extends State<MovieDetail> {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   actions: [
-                    IconButton(
-                        icon: Icon(Icons.alarm),
-                        onPressed: () {
-                          MovieNotificationService().showNotification({
-                            'id': movie.id,
-                            'title': 'salam',
-                            'body': 'beden',
-                            'payload': 'pay me bitch'
-                          });
-                        }),
-                    IconButton(
+                    FlatButton.icon(
+                        label: Text('Set reminder'),
                         icon: Icon(Icons.schedule),
-                        onPressed: () {
-                          MovieNotificationService().setScheduleNotification({
-                            'id': movie.id,
-                            'title': movie.title,
-                            'body': movie.overview,
-                            'payload': 'pay me bitch'
-                          }, DateTime.now().add(Duration(seconds: 10)));
-                        }),
+                        onPressed: () =>
+                            setReminder(movie.id, movie.title, movie.overview)),
                     IconButton(
                         icon: movie.favorite
                             ? Icon(Icons.favorite)
@@ -255,6 +242,53 @@ class _MovieDetailState extends State<MovieDetail> {
         ],
       ),
     );
+  }
+
+  void setReminder(int id, String title, String overview) async {
+    bool reminded = false;
+    bool error = false;
+    try {
+      var day = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime.now().subtract(Duration(days: 30)),
+          lastDate: DateTime.now().add(Duration(days: 60)));
+      if (day == null) throw ('canceled');
+      var time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+      final remind =
+          DateTime(day.year, day.month, day.day, time.hour, time.minute);
+      if (remind.isAfter(DateTime.now())) {
+        MovieNotificationService().setScheduleNotification({
+          'id': id,
+          'title': title,
+          'body': overview,
+          'payload': id.toString()
+        }, remind);
+        reminded = true;
+      }
+    } catch (_) {
+      error = true;
+    }
+    String message;
+    if (reminded)
+      message = 'You will be notified';
+    else
+      message = 'It must be in future';
+    if (error) message = 'Cancelled';
+    _scaffoldKey.currentState
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Text(message),
+          action: reminded && !error
+              ? SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () =>
+                      MovieNotificationService().clearNotification(id),
+                )
+              : null));
   }
 }
 
