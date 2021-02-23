@@ -38,10 +38,12 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/logo_bg.png',
+                'assets/images/moviedb.png',
                 fit: BoxFit.cover,
-                width: 120,
+                width: 160,
               ),
+              SizedBox(height: 24),
+              AppText('This app powered by TMDb', fontSize: 20),
               SizedBox(height: 24),
               CircularProgressIndicator(),
             ],

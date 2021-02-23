@@ -13,15 +13,15 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> {
   int currentPage = 0;
   final tiles = [
-    'Follow latest movies news',
+    'What is TMDB\'s API?',
     'Create your own movie list',
     'Get notify when your movie on screen'
   ];
 
-  final images = ['video.png', 'database.png', 'active.png'];
+  final images = ['moviedb.png', 'database.png', 'active.png'];
 
   final descriptions = [
-    "Every year since 2008, the number of contributions to our database has increased. With over 400,000 developers and companies using our platform, TMDb has become a premiere source for metadata.",
+    "This app powered by the moviedb. \n The Movie Database (TMDb) is a community built movie and TV database. Every piece of data has been added by our amazing community dating back to 2008. TMDb's strong international focus and breadth of data is largely unmatched and something we're incredibly proud of. Put simply, we live and breathe community and that's precisely what makes us different.",
     "We're international. While we officially support 39 languages we also have extensive regional data. Every single day TMDb is used in over 180 countries.",
     "Trusted platform. Every single day our service is used by millions of people while we process over 3 billion requests. We've proven for years that this is a service that can be trusted and relied on."
   ];

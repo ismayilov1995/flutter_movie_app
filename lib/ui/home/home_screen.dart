@@ -65,6 +65,13 @@ class _HomeScreenBody extends StatelessWidget {
                               ])),
                   _RecentMoviesRow(),
                   _PopularMoviesRow(state.genresModel),
+                  Container(
+                      height: 70,
+                      alignment: Alignment.center,
+                      child: AppText(
+                        'Powered by: www.themoviedb.org',
+                        color: kTextColor,
+                      ))
                 ],
               ),
             )
