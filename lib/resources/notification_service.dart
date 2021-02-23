@@ -43,6 +43,8 @@ class MovieNotificationService {
   }
 
   setScheduleNotification(Map<String, dynamic> data, DateTime date) async {
+    // Clear notification if set before
+    clearNotification(data['id']);
     final schedule = ((date.millisecondsSinceEpoch -
                 DateTime.now().millisecondsSinceEpoch) ~/
             1000)
@@ -67,11 +69,11 @@ class MovieNotificationService {
     flutterLocalNotificationsPlugin.cancelAll();
   }
 
-  Future onSelectNotification(String payload) {
+  Future onSelectNotification(String payload) async {
     if (payload != null) {
       print('Payload is: ' + payload);
-      // MovieDetail.route(context, int.parse(payload));
+      // not working, I couldn't figurate the reason
+      MovieDetail.route(_context, int.parse(payload));
     }
-    return null;
   }
 }
