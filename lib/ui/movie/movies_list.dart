@@ -69,6 +69,8 @@ class _MoviesListState extends State<MoviesList> {
   }
 
   Widget _successLoadMovies(BuildContext context, MovieResponse movieResponse) {
+    if (movieResponse == null)
+      return Center(child: Text('There is noting to show'));
     final movies = movieResponse.results;
     return GridView.builder(
         controller: _scrollCtrl,
