@@ -8,6 +8,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 class MovieNotificationService {
+  BuildContext _context;
+
   factory MovieNotificationService() => _singleton;
   static final MovieNotificationService _singleton =
       MovieNotificationService._internal();
@@ -15,14 +17,14 @@ class MovieNotificationService {
   MovieNotificationService._internal();
 
   initNotificationService(BuildContext context) {
+    _context = context;
     tz.initializeTimeZones();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     final android = AndroidInitializationSettings('@mipmap/ic_launcher');
     final ios = IOSInitializationSettings();
     final initSettings = InitializationSettings(android: android, iOS: ios);
     flutterLocalNotificationsPlugin.initialize(initSettings,
-        onSelectNotification: (String payload) =>
-            onSelectNotification(context, payload));
+        onSelectNotification: onSelectNotification);
   }
 
   static final _android = AndroidNotificationDetails(
@@ -65,7 +67,7 @@ class MovieNotificationService {
     flutterLocalNotificationsPlugin.cancelAll();
   }
 
-  Future onSelectNotification(BuildContext context, String payload) {
+  Future onSelectNotification(String payload) {
     if (payload != null) {
       print('Payload is: ' + payload);
       // MovieDetail.route(context, int.parse(payload));
