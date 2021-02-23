@@ -19,7 +19,7 @@ class MovieNotificationService {
     _context = context;
     tz.initializeTimeZones();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    final android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final android = AndroidInitializationSettings('app_icon');
     final ios = IOSInitializationSettings();
     final initSettings = InitializationSettings(android: android, iOS: ios);
     flutterLocalNotificationsPlugin.initialize(initSettings,
