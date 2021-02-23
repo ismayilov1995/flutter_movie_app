@@ -1,19 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/blocs/genre/genre_bloc.dart';
-import 'package:movie_app/blocs/movie_bloc.dart';
-import 'package:movie_app/blocs/search/search_cubit.dart';
-import 'package:movie_app/models/genre_model.dart';
-import 'package:movie_app/resources/repositories.dart';
-import 'package:movie_app/ui/movie/favorite_movie_screen.dart';
-import 'package:movie_app/ui/movie/movie_detail.dart';
-import 'package:movie_app/ui/movie/movies_list.dart';
+import 'package:movie_app/blocs/blocs.dart';
+import 'package:movie_app/models/models.dart';
+import 'package:movie_app/services/services.dart';
+import 'package:movie_app/ui/movie/movie.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   static route(BuildContext context) {
-    final repo = context.read<Repository>();
+    final repo = context.read<MovieRepository>();
     Navigator.pushReplacement(
         context,
         CupertinoPageRoute(

@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:movie_app/models/movie_response_model.dart';
 import 'package:movie_app/models/models.dart';
-import 'package:movie_app/resources/database_repository.dart';
-import 'package:movie_app/resources/repositories.dart';
+import 'package:movie_app/services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'movie_event.dart';
@@ -14,7 +12,7 @@ part 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   MovieBloc(this._repository) : super(MovieInitial());
-  final Repository _repository;
+  final MovieRepository _repository;
   final movieDB = DatabaseRepository();
 
   @override

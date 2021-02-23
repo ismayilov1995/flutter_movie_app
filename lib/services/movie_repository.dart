@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:movie_app/models/models.dart';
-import 'package:movie_app/resources/database_repository.dart';
-import 'package:movie_app/resources/movie_api_provider.dart';
+import 'package:movie_app/services/services.dart';
 
-class Repository {
+class MovieRepository {
   final movieApiProvider = MovieApiProvider();
   final movieDB = DatabaseRepository();
 

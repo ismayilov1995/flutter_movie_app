@@ -1,13 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:movie_app/models/models.dart';
-import 'package:movie_app/resources/repositories.dart';
+import 'package:movie_app/services/services.dart';
 
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit(this._repository) : super(SearchState());
 
-  Repository _repository;
+  MovieRepository _repository;
 
   void searchMovie(String query) async {
     if (query == null || query.isEmpty || query.length < 4) {
