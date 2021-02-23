@@ -11,26 +11,29 @@ class CachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExtendedImage.network(
-      path,
-      cache: true,
-      clearMemoryCacheIfFailed: true,
-      height: height,
-      width: width,
-      fit: fit,
-      loadStateChanged: (ExtendedImageState state) {
-        switch (state.extendedImageLoadState) {
-          case LoadState.failed:
-            return Text('Error');
-            break;
-          case LoadState.completed:
-            return ExtendedRawImage(
-              image: state.extendedImageInfo?.image,
-            );
-          default:
-            return Center(child: CircularProgressIndicator());
-        }
-      },
+    return ConstrainedBox(
+      constraints: BoxConstraints(minWidth: 90),
+      child: ExtendedImage.network(
+        path,
+        cache: true,
+        clearMemoryCacheIfFailed: true,
+        height: height,
+        width: width,
+        fit: fit,
+        loadStateChanged: (ExtendedImageState state) {
+          switch (state.extendedImageLoadState) {
+            case LoadState.failed:
+              return Text('Error');
+              break;
+            case LoadState.completed:
+              return ExtendedRawImage(
+                image: state.extendedImageInfo?.image,
+              );
+            default:
+              return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }
