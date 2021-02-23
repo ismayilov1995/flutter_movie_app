@@ -149,6 +149,7 @@ class _MovieDetailState extends State<MovieDetail> {
                         icon: Icon(Icons.alarm),
                         onPressed: () {
                           MovieNotificationService().showNotification({
+                            'id': movie.id,
                             'title': 'salam',
                             'body': 'beden',
                             'payload': 'pay me bitch'
@@ -158,6 +159,7 @@ class _MovieDetailState extends State<MovieDetail> {
                         icon: Icon(Icons.schedule),
                         onPressed: () {
                           MovieNotificationService().setScheduleNotification({
+                            'id': movie.id,
                             'title': movie.title,
                             'body': movie.overview,
                             'payload': 'pay me bitch'

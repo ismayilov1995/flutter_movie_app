@@ -29,7 +29,7 @@ class MovieNotificationService {
 
   void showNotification(Map<String, dynamic> data) async {
     await flutterLocalNotificationsPlugin.show(
-      0,
+      data['id'],
       data['title'] ?? 'Hey you',
       data['body'] ?? 'We are waiting for u',
       _platform,
@@ -43,7 +43,7 @@ class MovieNotificationService {
             1000)
         .abs();
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
+        data['id'],
         data['title'] ?? 'Hey you',
         data['body'] ?? 'We are waiting for u',
         tz.TZDateTime.now(tz.local).add(Duration(seconds: schedule)),
@@ -52,6 +52,14 @@ class MovieNotificationService {
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
+  }
+
+  clearNotification(int id) {
+    flutterLocalNotificationsPlugin.cancel(id);
+  }
+
+  clearAllNotification() {
+    flutterLocalNotificationsPlugin.cancelAll();
   }
 
   Future onSelectNotification(String payload) {
