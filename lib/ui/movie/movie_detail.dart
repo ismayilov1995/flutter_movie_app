@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc.dart';
 import 'package:movie_app/models/models.dart';
+import 'package:movie_app/resources/notification_service.dart';
 import 'package:movie_app/resources/repositories.dart';
 import 'package:movie_app/ui/movie/favorite_movie_screen.dart';
 import 'package:movie_app/ui/widgets/widgets.dart';
@@ -144,6 +145,24 @@ class _MovieDetailState extends State<MovieDetail> {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   actions: [
+                    IconButton(
+                        icon: Icon(Icons.alarm),
+                        onPressed: () {
+                          MovieNotificationService().showNotification({
+                            'title': 'salam',
+                            'body': 'beden',
+                            'payload': 'pay me bitch'
+                          });
+                        }),
+                    IconButton(
+                        icon: Icon(Icons.schedule),
+                        onPressed: () {
+                          MovieNotificationService().setScheduleNotification({
+                            'title': movie.title,
+                            'body': movie.overview,
+                            'payload': 'pay me bitch'
+                          }, DateTime.now().add(Duration(seconds: 10)));
+                        }),
                     IconButton(
                         icon: movie.favorite
                             ? Icon(Icons.favorite)
